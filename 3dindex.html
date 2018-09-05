@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3d</title>
+    <script src="three.min.js"></script>
+    <script src="OrbitStatic.js"></script>
+    <style>
+        body {
+            margin: 0px;
+        }
+    </style>
+</head>
+<body>
+
+<script type="x-shader/x-vertex" id="vertexShader">
+			varying vec3 vWorldPosition;
+			void main() {
+				vec4 worldPosition = modelMatrix * vec4( position, 1.0);
+				vWorldPosition = worldPosition.xyz;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0);
+			}
+
+
+
+
+
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentShader">
+			uniform vec3 topColor;
+			uniform vec3 bottomColor;
+			uniform float offset;
+			uniform float exponent;
+			varying vec3 vWorldPosition;
+			void main() {
+				float h = normalize( vWorldPosition + offset).y;
+				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent), 0.0)), 1.0);
+			}
+
+
+
+
+
+</script>
+
+<script type="x-shader/x-fragment" id="shadowscenevert">
+    # version 150 core
+
+    uniform mat4 modelMatrix;
+    uniform mat4 viewMatrix;
+    uniform mat4 projMatrix;
+    uniform mat4 textureMatrix;
+
+    in vec3 position;
+    in vec3 colour;
+    in vec3 normal;
+    in vec3 tangent;
+    in vec2 texCoord;
+
+    out Vertex {
+        vec3 colour;
+        vec2 texCoord;
+        vec3 normal;
+        vec3 tangent;
+        vec3 binormal;
+        vec3 worldPos;
+        vec4 shadowProj; // New !
+    } OUT;
+
+    void main (void) {
+        mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
+
+        OUT.colour = colour;
+        OUT.texCoord = texCoord;
+
+        OUT.normal = normalize(normalMatrix * normalize(normal));
+        OUT.tangent = normalize(normalMatrix * normalize(tangent));
+        OUT.binormal = normalize(normalMatrix * normalize(cross(normal, tangent)));
+
+        OUT.worldPos = (modelMatrix * vec4(position, 1)).xyz;
+        // New !
+        OUT.shadowProj = (textureMatrix * vec4(position + (normal *1.5), 1));
+
+        gl_Position = (projMatrix * viewMatrix * modelMatrix) * vec4(position, 1.0);
+    }
+</script>
+
+<script type="x-shader/x-fragment" id="shadowscenefrag">
+    # version 150 core
+    
+    uniform sampler2D diffuseTex;
+    uniform sampler2D bumpTex;
+    uniform sampler2DShadow shadowTex; // NEW !
+    
+    uniform vec4 lightColour;
+    uniform vec3 lightPos;
+    uniform vec3 cameraPos;
+    uniform float lightRadius;
+    
+    in Vertex {
+        vec3 colour;
+        vec2 texCoord;
+        vec3 normal;
+        vec3 tangent;
+        vec3 binormal;
+        vec3 worldPos;
+        vec4 shadowProj; // New !
+    } IN;
+    
+    out vec4 gl_FragColor;
+
+    void main(void) {
+        mat3 TBN = mat3(IN.tangent , IN.binormal , IN.normal);
+        vec3 normal = normalize(TBN * (texture2D(bumpTex , IN.texCoord).rgb * 2.0 - 1.0));
+
+        vec4 diffuse = texture2D(diffuseTex , IN.texCoord);
+
+        vec3 incident = normalize(lightPos - IN.worldPos);
+        float lambert = max (0.0 , dot(incident , normal)); // Different !
+
+        float dist = length(lightPos - IN.worldPos);
+        float atten = 1.0 - clamp(dist / lightRadius , 0.0 , 1.0);
+
+        vec3 viewDir = normalize(cameraPos - IN.worldPos);
+        vec3 halfDir = normalize(incident + viewDir);
+
+        float rFactor = max (0.0 , dot(halfDir , normal)); // Different !
+        float sFactor = pow(rFactor , 33.0);
+
+        float shadow = 1.0; // New !
+
+        if( IN.shadowProj.w > 0.0) { // New !
+            shadow = textureProj ( shadowTex , IN.shadowProj );
+        }
+        
+        lambert *= shadow ; // New !
+        
+        vec3 colour = ( diffuse.rgb * lightColour.rgb );
+        colour += ( lightColour.rgb * sFactor ) * 0.33;
+        gl_FragColor = vec4 ( colour * atten * lambert , diffuse.a );
+        gl_FragColor.rgb += ( diffuse.rgb * lightColour.rgb ) * 0.1;
+    }
+</script>
+
+<script src="PointerLockControls.js"></script>
+<script src="Vec3.js"></script>
+<script src="Stats.js"></script>
+<script src="OBJLoader.js"></script>
+<script src="wall.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

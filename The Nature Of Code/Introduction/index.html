@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+
+<head>
+
+  <meta charset='utf-8'>
+  <title>Introduction</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300|IBM+Plex+Mono:100' rel='stylesheet'>
+  <style>
+    body {
+      margin: 0px;
+    }
+
+    #buttons {
+      display: flex;
+      /*#6e8efb, #a777e3*/
+      width: auto;
+      justify-content: center;
+    }
+
+    #control {
+      text-align: center;
+      /*background: linear-gradient(155deg, #c579e9, #a079e5, #a079e5, #b079e5, #758bf8, #758bf8, #7190f8, #69c2d5);
+      #6e8efb, #a777e3*/
+      background: transparent;
+      position: absolute;
+      width: 100%;
+    }
+
+    .speButtons {
+      width: 100%;
+      text-align: center;
+      position: absolute;
+      top: 2em;
+      height: 96%;
+    }
+
+    .container {
+      font-family: 'Roboto', sans-serif;
+      letter-spacing: .05em;
+      background: transparent;
+      background: rgba(22, 22, 22, .5);
+      border: none;
+      display: inline-block;
+
+      padding: 0.5em 0em;
+
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+      color: white;
+    }
+
+    .container:hover {
+      background: rgba(22, 22, 22, .5);
+    }
+
+    .container input {
+      display: none;
+      cursor: pointer;
+    }
+
+    .checkmark {
+      padding: 0.5em 2em;
+      background: -webkit-linear-gradient(125deg, #6e8efb, #6e8efb, #a777e3, #a777e3);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .checkmark:hover {
+      background: #fafafa;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .container input:checked~.checkmark {
+      background: #fafafa;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .info {
+      font-size: 0.7em;
+      text-align: left;
+      font-family: 'IBM Plex Mono', monospace;
+      display: none;
+      position: absolute;
+      width: 80%;
+      margin-bottom: 2em;
+      bottom: -1em;
+      left: 1em;
+    }
+
+    .container input:checked~.info {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <script src='../js/p5.min.js'></script>
+  <script src='../js/gpu.js'></script>
+  <script src='../js/quickNoise.js'></script>
+  <script src='script.js'></script>
+
+
+  <div id='control'>
+    <div id='buttons' name='buttons'>
+      <label class='container'>
+        <input type='radio' name='stateC' value='walkerButtons'>
+        <span class='checkmark'>Walker</span>
+      </label>
+      <label class='container'>
+        <input type='radio' name='stateC' value='randomButtons'>
+        <span class='checkmark'>Random Distributions</span>
+      </label>
+      <label class='container'>
+        <input type='radio' name='stateS' value='2DPerlinNoise'>
+        <span class='checkmark'>2D Perlin Noise</span>
+      </label>
+    </div>
+  </div>
+
+  <div class='speButtons'>
+    <div id='randomButtons'>
+      <label class='container'>
+        <input type='radio' name='state' value='randomDistribution'>
+        <span class='checkmark'>Normal Distributions</span>
+      </label>
+      <label class='container'>
+        <input type='radio' name='state' value='gausianDistribution'>
+        <span class='checkmark'>Gausian Distribution</span>
+        <div class='info'>A gausian distribution takes the shape of the bell curve. The closer to mean a number is, the higher probability
+          is with be selected.</div>
+      </label>
+      <label class='container'>
+        <input type='radio' name='state' value='monteCarlo'>
+        <span class='checkmark'>Monte Carlo Distribution</span>
+        <div class='info'>In a monte carlo distribution, the larger a number, the greater the chance it will be selected. Because of this,
+          there must be a largest possible number in each distribution.</div>
+      </label>
+      <label class='container'>
+        <input type='radio' name='state' value='perlinNoise'>
+        <span class='checkmark'>Perlin Noise</span>
+      </label>
+    </div>
+  </div>
+
+  <div class='speButtons'>
+    <div id='walkerButtons'>
+      <label class='container'>
+        <input type='radio' name='state' value='randomWalk'>
+        <span class='checkmark'>Random Walk</span>
+      </label>
+      <label class='container'>
+        <input type='radio' name='state' value='directionalWalker'>
+        <span class='checkmark'>Directional Walk</span>
+      </label>
+      <label class='container'>
+        <input type='radio' name='state' value='perlinWalker'>
+        <span class='checkmark'>Perlin Noise Walk</span>
+      </label>
+    </div>
+  </div>
+</body>
+
+</html>

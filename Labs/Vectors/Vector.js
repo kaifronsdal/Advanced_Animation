@@ -5,12 +5,19 @@ function JSVector(x, y) {
     this.y = y || 0;
 }
 
+// normalize vector
+JSVector.prototype.normalize = function () {
+    let curMag = this.getMagnitude();
+    this.x /= curMag;
+    this.y /= curMag;
+};
+
 // Set the magnitude of the vector,
 // retaining the angle (direction).
 JSVector.prototype.setMagnitude = function (mag) {
-    let curMag = this.getMagnitude();
-    this.x *= mag / curMag;
-    this.y *= mag / curMag;
+    let transform = mag / this.getMagnitude();
+    this.x *= transform;
+    this.y *= transform;
 };
 
 // Get the magnitude of the vector using pythagorean theorem
@@ -75,8 +82,7 @@ JSVector.prototype.normalize = function () {
 
 // Limit the magnitude of this vector
 JSVector.prototype.limit = function (lim) {
-    var curMag = this.getMagnitude();
-    if (curMag > lim) {
+    if (this.getMagnitude() > lim) {
         this.setMagnitude(lim);
     }
 }

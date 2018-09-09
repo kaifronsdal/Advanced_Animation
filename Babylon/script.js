@@ -1,4 +1,4 @@
-var box, animationBoxHelper, animationBox, camera, shadowGenerator;
+var box, animationBounceHelper, animationBounce, sphere, camera, shadowGenerator;
 
 var createScene = function () {
     var scene = new BABYLON.Scene(engine);
@@ -21,18 +21,25 @@ var createScene = function () {
 
     //Box
     box = BABYLON.Mesh.CreateBox("box", 10.0, scene);
+    box.position.x -= 20;
+
+    //ball
+    sphere = BABYLON.MeshBuilder.CreateSphere("box", {diameter: 10}, scene);
+    sphere.position.x += 20;
 
     //box material
-    var materialBox = new BABYLON.StandardMaterial("texture1", scene);
-    materialBox.diffuseColor = new BABYLON.Color3(0, 1, 0);
+    var material = new BABYLON.StandardMaterial("texture1", scene);
+    material.diffuseColor = new BABYLON.Color3(0, 1, 0);
 
     //Applying materials
-    box.material = materialBox;
+    box.material = material;
+
+    sphere.material = material;
 
 
     //shadow map
     shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
-    shadowGenerator.getShadowMap().renderList.push(box);
+    shadowGenerator.getShadowMap().renderList.push(box, sphere);
     shadowGenerator.useExponentialShadowMap = true;
 
     //create ground
@@ -45,7 +52,7 @@ var createScene = function () {
     ground.receiveShadows = true;
 
     //Create a scaling animation at 30 FPS
-    animationBox = new BABYLON.Animation("Animation", "scaling", 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+    animationBounce = new BABYLON.Animation("Animation", "scaling", 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
         BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
 
     // Animation keys
@@ -108,7 +115,7 @@ var createScene = function () {
     }
 
     //Adding keys to the animation object
-    animationBox.setKeys(keys);
+    animationBounce.setKeys(keys);
 
     var easingFunction = new BABYLON.CubicEase();
 
@@ -116,13 +123,16 @@ var createScene = function () {
     easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
 
     // Adding easing function to my animation
-    animationBox.setEasingFunction(easingFunction);
+    animationBounce.setEasingFunction(easingFunction);
 
     //Then add the animation object to box
-    box.animations.push(animationBox);
+    box.animations.push(animationBounce);
+
+    sphere.animations.push(animationBounce);
 
     //Finally, launch animations on box, from key 0 to key 100 with loop activated
-    animationBoxHelper = scene.beginAnimation(box, 0, 100, true);
+    animationBounceHelper = scene.beginAnimation(box, 0, 100, true);
+    scene.beginAnimation(sphere, 0, 100, true)
     return scene;
 };
 
@@ -135,10 +145,13 @@ var scene = createScene();
 
 engine.runRenderLoop(function () {
     if (scene) {
-        if (animationBoxHelper.masterFrame % animationBoxHelper.toFrame < 0.5)
+        //move objects and change object color
+        if (animationBounceHelper.masterFrame % animationBounceHelper.toFrame < 0.5) {
             box.material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-        box.position.y = Math.abs(Math.sin(animationBoxHelper.masterFrame / animationBoxHelper.toFrame * Math.PI * 2) + 0.01) * 50 - 1;
-        if (box.position.y < 5 * box._scaling.y) box.position.y = 5 * box._scaling.y;
+        }
+        box.position.y = Math.abs(Math.sin(animationBounceHelper.masterFrame / animationBounceHelper.toFrame * Math.PI * 2) + 0.01) * 50 - 1;
+        sphere.position.y = Math.abs(Math.sin(animationBounceHelper.masterFrame / animationBounceHelper.toFrame * Math.PI * 2) + 0.01) * 50 - 1;
+        if (box.position.y < 5 * box._scaling.y) { box.position.y = sphere.position.y = 5 * box._scaling.y; }
 
         scene.render();
     }

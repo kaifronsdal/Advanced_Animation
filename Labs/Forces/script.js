@@ -106,19 +106,35 @@ var createScene = function () {
         }
     };
 
+    // Water
+    var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", width, length, 32, scene, false);
+    waterMesh.position.y = 50;
+    var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(1024, 1024));
+    water.backFaceCulling = true;
+    water.bumpTexture = new BABYLON.Texture("https://i.imgur.com/ZdblzoL.jpg", scene);
+    water.windForce = -5;
+    water.windDirection = new BABYLON.Vector2(1.0, 1.0);
+    water.waveHeight = 0.1;
+    water.bumpHeight = 0.1;
+    water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.5);
+    water.colorBlendFactor = 0.3;
+    water.addToRenderList(ground);
+    waterMesh.material = water;
+
+    var waterU = new BABYLON.MeshBuilder.CreateBox("waterU", {height: 50, width: width, depth: length});
+    waterU.position.y = 25;
+    var Wmaterial = new BABYLON.StandardMaterial("waterMaterial", scene);
+    Wmaterial.diffuseColor = new BABYLON.Color3(0.2, 0.2, 1);
+    Wmaterial.alpha = 0.5;
+    waterU.material = Wmaterial;
+
     //create Movers
     var movers = [];
     for (var i = 0; i < 10; i++) {
         movers.push(new Mover((Math.random() - 0.5) * 90, (Math.random()) * 50 + 200, (Math.random() - 0.5) * 90, Math.random() * 10 + 5, scene));
         movers[i].applyForce(new Vector(Math.random() * 1000 - 500, Math.random() * 1000 - 5000, Math.random() * 1000 - 500));
+        water.addToRenderList(movers[i].mesh);
     }
-
-    var water = new BABYLON.MeshBuilder.CreateBox("water", {height: 50, width: width, depth: length});
-    water.position.y = 25;
-    var material = new BABYLON.StandardMaterial("waterMaterial", scene);
-    material.diffuseColor = new BABYLON.Color3(0, 0, 1);
-    material.alpha = 0.5;
-    water.material = material;
 
     //animate
     scene.registerBeforeRender(function () {

@@ -220,3 +220,9 @@ Vector.fromArray = function (a) {
 Vector.angleBetween = function (a, b) {
     return a.angleTo(b);
 };
+
+function constrain(x, a, b) {
+  if (x < a) x = a;
+  else if (x > b) x = b;
+  return x;
+}

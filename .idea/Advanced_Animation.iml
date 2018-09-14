@@ -11,5 +11,6 @@
     <orderEntry type="library" name="babylon" level="application" />
     <orderEntry type="library" name="babylon.gui" level="application" />
     <orderEntry type="library" name="babylon.max" level="application" />
+    <orderEntry type="library" name="oimo" level="application" />
   </component>
 </module>

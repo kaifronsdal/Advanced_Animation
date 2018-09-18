@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1548d791-2c2f-469d-b67a-940f5d3f910d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Advanced_Animation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Advanced_Animation.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Babylon Basketball Game/index 2.html" beforeDir="false" />
-    </list>
+    <list default="true" id="1548d791-2c2f-469d-b67a-940f5d3f910d" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -19,7 +15,7 @@
     <session id="666065474">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="1" />
@@ -194,16 +190,15 @@
       <workItem from="1536184226523" duration="171000" />
       <workItem from="1536195206093" duration="1223000" />
       <workItem from="1536338545285" duration="21635000" />
-      <workItem from="1536801473528" duration="7006000" />
+      <workItem from="1536801473528" duration="7147000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30035000" />
+    <option name="totallyTimeSpent" value="30176000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1366" height="696" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24981412" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />

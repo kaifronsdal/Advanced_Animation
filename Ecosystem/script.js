@@ -33,6 +33,46 @@ var createScene = function () {
     camera.setTarget(new BABYLON.Vector3(0, 15, 0));
     camera.attachControl(canvas, true);
 
+
+    var b1 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 300, width: 300, depth: 10}, scene);
+    b1.position.z = -150;
+    b1.physicsImpostor = new BABYLON.PhysicsImpostor(b1, BABYLON.PhysicsImpostor.BoxImpostor, {
+        mass: 0,
+        restitution: 0.9
+    }, scene);
+    var b2 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 300, width: 300, depth: 10}, scene);
+    b2.position.z = 150;
+    b2.physicsImpostor = new BABYLON.PhysicsImpostor(b2, BABYLON.PhysicsImpostor.BoxImpostor, {
+        mass: 0,
+        restitution: 0.9
+    }, scene);
+
+    var b3 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 300, width: 10, depth: 300}, scene);
+    b3.position.x = -150;
+    b3.physicsImpostor = new BABYLON.PhysicsImpostor(b3, BABYLON.PhysicsImpostor.BoxImpostor, {
+        mass: 0,
+        restitution: 0.9
+    }, scene);
+    var b4 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 300, width: 10, depth: 300}, scene);
+    b4.position.x = 150;
+    b4.physicsImpostor = new BABYLON.PhysicsImpostor(b4, BABYLON.PhysicsImpostor.BoxImpostor, {
+        mass: 0,
+        restitution: 0.9
+    }, scene);
+
+    var b5 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 10, width: 300, depth: 300}, scene);
+    b5.position.y = -150;
+    b5.physicsImpostor = new BABYLON.PhysicsImpostor(b5, BABYLON.PhysicsImpostor.BoxImpostor, {
+        mass: 0,
+        restitution: 0.9
+    }, scene);
+    var b6 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 10, width: 300, depth: 300}, scene);
+    b6.position.y = 150;
+    b6.physicsImpostor = new BABYLON.PhysicsImpostor(b6, BABYLON.PhysicsImpostor.BoxImpostor, {
+        mass: 0,
+        restitution: 0.9
+    }, scene);
+
     /*var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 0, -10), scene);
 
     camera.setTarget(BABYLON.Vector3.Zero());

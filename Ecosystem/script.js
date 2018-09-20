@@ -1,5 +1,9 @@
 var createScene = function () {
     var scene = new BABYLON.Scene(engine);
+    var gravityVector = new BABYLON.Vector3(0, 0, 0);
+    var physicsPlugin = new BABYLON.CannonJSPlugin();
+    scene.enablePhysics(gravityVector, physicsPlugin);
+    var physicsHelper = new BABYLON.PhysicsHelper(scene);
 
     //lights
     var light = new BABYLON.DirectionalLight("DirLight", new BABYLON.Vector3(-0.1, -1, 0.2), scene);
@@ -29,28 +33,35 @@ var createScene = function () {
     camera.setTarget(new BABYLON.Vector3(0, 15, 0));
     camera.attachControl(canvas, true);
 
+    /*var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 0, -10), scene);
+
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    camera.attachControl(canvas, true);*/
+
+    var width = 300;
+    var height = 300;
+    var depth = 300;
+
     function Mover(x, y, z, radius, scene) {
-        this.pos = new Vector(x, y, z);
-        this.vel = new Vector(0, 0, 0);
-        this.acc = new Vector(0, 0, 0);
-        this.avel = new Vector(0, 0, 0);
-        this.aacc = new Vector(0, 0, 0);
-        this.apos = new Vector(0, 0, 0);
-        this.mass = radius * radius * radius;
-        this.radius = radius;
-        this.mesh = new BABYLON.MeshBuilder.CreateBox("sphere" + Math.random(), {
-            height: radius,
-            width: radius,
-            depth: radius
+        this.mesh = new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
+            diameter: 2*radius
         }, scene, false);
-        this.mesh.positon = this.pos;
+        this.mesh.position.x = x;
+        this.mesh.position.y = y;
+        this.mesh.position.z = z;
+
+        this.mesh.physicsImpostor = new BABYLON.PhysicsImpostor(this.mesh, BABYLON.PhysicsImpostor.SphereImpostor, {
+            mass: 1,
+            restitution: 0.9
+        }, scene);
         this.material = new BABYLON.StandardMaterial("texture1", scene);
         this.material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
         this.mesh.material = this.material;
     }
 
     Mover.prototype.applyForce = function (force) {
-        this.acc.add(force.div(this.mass));
+        this.mesh.physicsImpostor.physicsImpostor.applyForce(force.toBabylon(), this.mesh.getAbsolutePosition());
     };
 
     /*Mover.prototype.drag = function (mag) {
@@ -68,44 +79,40 @@ var createScene = function () {
     };*/
 
     Mover.prototype.update = function () {
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
-        this.mesh.position = this.pos.toBabylon();
 
-        this.aacc = this.acc.clone().div(100);
-        this.aacc.constrain(-0.01, 0.01);
-        this.avel.add(this.aacc);
-        this.avel.constrain(-0.3, 0.3);
-        //this.apos.add(this.avel);
-        this.mesh.rotate(BABYLON.Axis.X, this.avel.x, BABYLON.Space.WORLD);
-        this.mesh.rotate(BABYLON.Axis.Y, this.avel.y, BABYLON.Space.WORLD);
-        this.mesh.rotate(BABYLON.Axis.Z, this.avel.z, BABYLON.Space.WORLD);
-        this.acc.mult(0);
+        //check edges
+
     };
 
 
     function Attractor(x, y, z, radius, scene) {
-        this.pos = new Vector(x, y, z);
-        this.vel = new Vector(0, 0, 0);
-        this.acc = new Vector(0, 0, 0);
-        this.avel = new Vector(0, 0, 0);
-        this.aacc = new Vector(0, 0, 0);
-        this.apos = new Vector(0, 0, 0);
-        this.mass = radius * radius * radius;
-        this.radius = radius;
-        this.mesh = new BABYLON.MeshBuilder.CreateBox("sphere" + Math.random(), {
-            height: radius,
-            width: radius,
-            depth: radius
+        this.mesh = new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
+            diameter: 2*radius
         }, scene, false);
-        this.mesh.positon = this.pos;
+        this.mesh.position.x = x;
+        this.mesh.position.y = y;
+        this.mesh.position.z = z;
+
+        this.mesh.physicsImpostor = new BABYLON.PhysicsImpostor(this.mesh, BABYLON.PhysicsImpostor.SphereImpostor, {
+            mass: 0,
+            restitution: 0.9
+        }, scene);
+
+        this.gravitationalFieldEvent = physicsHelper.gravitationalField(
+            this.mesh.position,
+            75,
+            5,
+            1
+        );
+        this.gravitationalFieldEvent.enable();
+
         this.material = new BABYLON.StandardMaterial("texture1", scene);
         this.material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
         this.mesh.material = this.material;
     }
 
     Attractor.prototype.applyForce = function (force) {
-        this.acc.add(force.div(this.mass));
+        this.mesh.physicsImpostor.physicsImpostor.applyForce(force.toBabylon(), this.mesh.getAbsolutePosition());
     };
 
     /*Attractor.prototype.drag = function (mag) {
@@ -126,13 +133,16 @@ var createScene = function () {
         for (let i = 0; i < movers.length; i++) {
             let force = Vector.sub(this.pos, movers[i].pos);
             let distance = force.mag();
-            distance = constrain(distance, 5, 25);
+            let d2 = (this.pos.x - movers[i].pos.x) * (this.pos.x - movers[i].pos.x) + (this.pos.y - movers[i].pos.y) * (this.pos.y - movers[i].pos.y);
+            if (d2 < 75 * 75) {
+                distance = constrain(distance, 5, 75);
 
-            force.normalize();
-            let strength = (0.097 * this.mass * movers[i].mass) / (distance * distance);
-            force.mult(strength/1.5);
+                force.normalize();
+                let strength = (0.097 * this.mass * movers[i].mass) / (distance * distance);
+                force.mult(strength / 1.5);
 
-            movers[i].applyForce(force);
+                movers[i].applyForce(force);
+            }
         }
     };
 
@@ -154,27 +164,33 @@ var createScene = function () {
 
 
     function Repulsor(x, y, z, radius, scene) {
-        this.pos = new Vector(x, y, z);
-        this.vel = new Vector(0, 0, 0);
-        this.acc = new Vector(0, 0, 0);
-        this.avel = new Vector(0, 0, 0);
-        this.aacc = new Vector(0, 0, 0);
-        this.apos = new Vector(0, 0, 0);
-        this.mass = radius * radius * radius;
-        this.radius = radius;
-        this.mesh = new BABYLON.MeshBuilder.CreateBox("sphere" + Math.random(), {
-            height: radius,
-            width: radius,
-            depth: radius
+        this.mesh = new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
+            diameter: 2*radius
         }, scene, false);
-        this.mesh.positon = this.pos;
+        this.mesh.position.x = x;
+        this.mesh.position.y = y;
+        this.mesh.position.z = z;
+
+        this.mesh.physicsImpostor = new BABYLON.PhysicsImpostor(this.mesh, BABYLON.PhysicsImpostor.SphereImpostor, {
+            mass: 0,
+            restitution: 0.9
+        }, scene);
+
+        this.gravitationalFieldEvent = physicsHelper.gravitationalField(
+            this.mesh.position,
+            75,
+            -5,
+            1
+        );
+        this.gravitationalFieldEvent.enable();
+
         this.material = new BABYLON.StandardMaterial("texture1", scene);
         this.material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
         this.mesh.material = this.material;
     }
 
     Repulsor.prototype.applyForce = function (force) {
-        this.acc.add(force.div(this.mass));
+        this.mesh.physicsImpostor.physicsImpostor.applyForce(force.toBabylon(), this.mesh.getAbsolutePosition());
     };
 
     /*Attractor.prototype.drag = function (mag) {
@@ -195,13 +211,16 @@ var createScene = function () {
         for (let i = 0; i < movers.length; i++) {
             let force = Vector.sub(this.pos, movers[i].pos);
             let distance = force.mag();
-            distance = constrain(distance, 5, 25);
+            let d2 = (this.pos.x - movers[i].pos.x) * (this.pos.x - movers[i].pos.x) + (this.pos.y - movers[i].pos.y) * (this.pos.y - movers[i].pos.y);
+            if (d2 < 50 * 50) {
+                distance = constrain(distance, 5, 50);
 
-            force.normalize();
-            let strength = (0.097 * this.mass * movers[i].mass) / (distance * distance);
-            force.mult(-strength/3);
+                force.normalize();
+                let strength = (0.097 * this.mass * movers[i].mass) / (distance * distance);
+                force.mult(-strength / 5);
 
-            movers[i].applyForce(force);
+                movers[i].applyForce(force);
+            }
         }
     };
 
@@ -239,42 +258,30 @@ var createScene = function () {
         repulsors.push(new Repulsor((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, Math.random() * 10 + 1, scene));
     }
 
+    var waterU = new BABYLON.MeshBuilder.CreateSphere("waterU", {diameter: 100}, scene);
+    waterU.position = repulsors[0].mesh.position;
+    var Wmaterial = new BABYLON.StandardMaterial("waterMaterial", scene);
+    Wmaterial.diffuseColor = new BABYLON.Color3(0.2, 0.2, 1);
+    Wmaterial.alpha = 0.5;
+    waterU.material = Wmaterial;
+
     //animate
-    var centerOfMass = new Vector();
     scene.registerBeforeRender(function () {
-        centerOfMass = new Vector();
         for (let i = 0; i < movers.length; i++) {
             //movers[i].drag(0.05);
             movers[i].update();
-            centerOfMass.add(movers[i].pos);
         }
-        centerOfMass.div(movers.length * 2);
 
         for (let i = 0; i < attractors.length; i++) {
             //attractors[i].drag(0.05);
-            attractors[i].attract(movers);
-            attractors[i].update();
-            centerOfMass.add(attractors[i].pos);
+            //attractors[i].attract(movers);
+            //attractors[i].update();
         }
-        centerOfMass.div(attractors.length * 2);
 
         for (let i = 0; i < repulsors.length; i++) {
-            //attractors[i].drag(0.05);
-            repulsors[i].repulse(movers);
-            repulsors[i].update();
-            centerOfMass.add(repulsors[i].pos);
-        }
-        centerOfMass.div(repulsors.length * 2);
-
-
-        for (var i = 0; i < movers.length; i++) {
-            //movers[i].pos.sub(centerOfMass);
-        }
-        for (var i = 0; i < attractors.length; i++) {
-            //attractors[i].pos.sub(centerOfMass);
-        }
-        for (var i = 0; i < repulsors.length; i++) {
-            //repulsors[i].pos.sub(centerOfMass);
+            //repulsors[i].drag(0.05);
+            //repulsors[i].repulse(movers);
+            //repulsors[i].update();
         }
     });
 

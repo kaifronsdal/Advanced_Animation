@@ -3,11 +3,10 @@ var createScene = function () {
     var gravityVector = new BABYLON.Vector3(0, 0, 0);
     var physicsPlugin = new BABYLON.CannonJSPlugin();
     scene.enablePhysics(gravityVector, physicsPlugin);
-    var physicsHelper = new BABYLON.PhysicsHelper(scene);
 
     //lights
     var light = new BABYLON.DirectionalLight("DirLight", new BABYLON.Vector3(-0.1, -1, 0.2), scene);
-    light.specular = new BABYLON.Color3(0.2, 0.2, 0.2);
+    light.specular = new BABYLON.Color3(0, 0, 0);
     light.position = new BABYLON.Vector3(100, 300, 200);
     light.shadowEnabled = true;
 
@@ -20,7 +19,8 @@ var createScene = function () {
     light3.specular = new BABYLON.Color3(0, 0, 0);
     light3.intensity = 0.8;
 
-    var skybox = BABYLON.MeshBuilder.CreateSphere("skyBox", {diameter: 2000}, scene);
+    //skybox
+    var skybox = BABYLON.MeshBuilder.CreateSphere("skyBox", {diameter: 10000}, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("https://www.babylonjs.com/assets/skybox/nebula", scene);
@@ -29,14 +29,15 @@ var createScene = function () {
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
 
+    //camera
     var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 200, new BABYLON.Vector3.Zero(), scene);
     camera.setTarget(new BABYLON.Vector3(0, 15, 0));
     camera.attachControl(canvas, true);
 
 
-    var width = 300;
-    var height = 300;
-    var length = 300;
+    var width = 1000;
+    var height = 1000;
+    var length = 1000;
     //bounding box
     {
         var Bmaterial = new BABYLON.StandardMaterial("boundingMaterial", scene);
@@ -44,39 +45,39 @@ var createScene = function () {
         Bmaterial.alpha = 0.5;
 
         var b1 = BABYLON.MeshBuilder.CreateBox("myBox", {height: height, width: width, depth: 1}, scene);
-        b1.position.z = -150;
+        b1.position.z = -length / 2;
         /*b1.physicsImpostor = new BABYLON.PhysicsImpostor(b1, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
         }, scene);*/
         var b2 = BABYLON.MeshBuilder.CreateBox("myBox", {height: height, width: width, depth: 1}, scene);
-        b2.position.z = 150;
+        b2.position.z = length / 2;
         /*b2.physicsImpostor = new BABYLON.PhysicsImpostor(b2, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
         }, scene);*/
 
         var b3 = BABYLON.MeshBuilder.CreateBox("myBox", {height: height, width: 1, depth: length}, scene);
-        b3.position.x = -150;
+        b3.position.x = -width / 2;
         /*b3.physicsImpostor = new BABYLON.PhysicsImpostor(b3, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
         }, scene);*/
         var b4 = BABYLON.MeshBuilder.CreateBox("myBox", {height: height, width: 1, depth: length}, scene);
-        b4.position.x = 150;
+        b4.position.x = width / 2;
         /*b4.physicsImpostor = new BABYLON.PhysicsImpostor(b4, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
         }, scene);*/
 
         var b5 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 1, width: width, depth: length}, scene);
-        b5.position.y = -150;
+        b5.position.y = -height / 2;
         /*b5.physicsImpostor = new BABYLON.PhysicsImpostor(b5, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
         }, scene);*/
         var b6 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 1, width: width, depth: length}, scene);
-        b6.position.y = 150;
+        b6.position.y = height / 2;
         /*b6.physicsImpostor = new BABYLON.PhysicsImpostor(b6, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
@@ -85,29 +86,11 @@ var createScene = function () {
         b1.material = b2.material = b3.material = b4.material = b5.material = b6.material = Bmaterial;
     }
 
-    var proj = new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
-        diameter: 60
-    }, scene, false);
-
-    var material = new BABYLON.StandardMaterial("texture1", scene);
-    material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-    material.alpha = 0.5;
-    proj.material = material;
-
-    var projp = new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
-        diameter: 30
-    }, scene, false);
-
-    var material = new BABYLON.StandardMaterial("texture1", scene);
-    material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-    material.alpha = 0.5;
-    projp.material = material;
-
 
     var snakes;
     var boids;
 
-    //mover class
+    //boid class
     function Boid(x, y, z, radius, scene, i) {
         this.mesh = new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
             diameter: 2 * radius
@@ -116,8 +99,12 @@ var createScene = function () {
         this.mesh.position.y = y;
         this.mesh.position.z = z;
 
-        this.maxSpeed = 100;
-        this.maxForce = 400;
+        this.pos = new Vector(x, y, z);
+        this.vel = new Vector(0, 0, 1);
+        this.acc = new Vector(0, 0, 0);
+
+        this.maxSpeed = 40;
+        this.maxForce = 0.1;
 
         this.radius = radius + 2;
 
@@ -125,11 +112,6 @@ var createScene = function () {
             mass: 1,
             restitution: 0.9
         }, scene);
-        this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 1));
-        this.mesh.physicsImpostor.indexm = i;
-
-
-        this.oldVel = this.mesh.physicsImpostor.getLinearVelocity();
 
         this.material = new BABYLON.StandardMaterial("texture1", scene);
         this.material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
@@ -140,90 +122,157 @@ var createScene = function () {
     }
 
     Boid.prototype.applyForce = function (force) {
-        this.mesh.physicsImpostor.applyForce(force.toBabylon(), this.mesh.getAbsolutePosition());
+        this.acc.add(force);
     };
 
     Boid.prototype.update = function () {
-        var vel = this.mesh.physicsImpostor.getLinearVelocity();
-        var pos = this.mesh.position;
-        /*if (pos.x < -width / 2 || pos.x > width / 2) {
-            pos.x /= Math.abs(pos.x);
-            pos.x *= -1;
-            pos.x *= width / 2;
+        //check edges
+        if (this.pos.x < -width / 2 || this.pos.x > width / 2) {
+            this.pos.x /= Math.abs(this.pos.x);
+            this.pos.x *= -1;
+            this.pos.x *= width / 2;
         }
-        if (pos.z < -length / 2 || pos.z > length / 2) {
-            pos.z /= Math.abs(pos.z);
-            pos.z *= -1;
-            pos.z *= length / 2;
+        if (this.pos.z < -length / 2 || this.pos.z > length / 2) {
+            this.pos.z /= Math.abs(this.pos.z);
+            this.pos.z *= -1;
+            this.pos.z *= length / 2;
         }
-        if (pos.y < -height / 2 || pos.y > height / 2) {
-            pos.y /= Math.abs(pos.y);
-            pos.y *= -1;
-            pos.y *= height / 2;
+        if (this.pos.y < -height / 2 || this.pos.y > height / 2) {
+            this.pos.y /= Math.abs(this.pos.y);
+            this.pos.y *= -1;
+            this.pos.y *= height / 2;
         }
 
-        */
-
+        //steer in toward random point projected in front of boid
         let projDist = 50;
-        let projVecDir = fromBabylon(vel).normalize().mult(projDist);
-        let projectVec = fromBabylon(this.mesh.position).add(projVecDir);
+        let projVecDir = this.vel.clone().normalize().mult(projDist);
+        let projectVec = this.pos.clone().add(projVecDir);
 
-        this.theta += (Math.random() - 0.5)*15/180*Math.PI;
-        this.alpha += (Math.random() - 0.5)*15/180*Math.PI;
-
-        /*this.mesh.physicsImpostor.onCollideEvent = function(self, other) {
-            console.log(boids[self.indexm]);
-            boids[self.indexm].theta = Math.random()*Math.PI*2;
-            boids[self.indexm].alpha = Math.random()*Math.PI;
-        };*/
-
-        proj.position.set(projectVec.x, projectVec.y, projectVec.z);
+        this.theta += (Math.random() - 0.5) * 2 * 15 / 180 * Math.PI;
+        this.alpha += (Math.random() - 0.5) * 2 * 15 / 180 * Math.PI;
 
         let sp = new Vector(Math.cos(this.theta) * Math.sin(this.alpha), Math.cos(this.alpha) * Math.sin(this.theta), Math.cos(this.alpha));
         let projPoint = projectVec.add(sp.mult(30));
 
-        projp.position.set(projPoint.x, projPoint.y, projPoint.z);
-
-        let desired = projectVec.add(projPoint);
+        let desired = projPoint.sub(this.pos);
         desired.normalize();
         desired.mult(this.maxSpeed);
-        desired.sub(fromBabylon(this.mesh.physicsImpostor.getLinearVelocity()));
-        desired.limit(this.maxForce);
+        desired.limit(this.maxForce / 10);
         this.applyForce(desired);
+
+        //update movement variables
+        this.vel.add(this.acc);
+        this.acc.mult(0);
+        this.vel.limit(this.maxSpeed);
+        this.pos.add(this.vel.div(10));
+        this.mesh.position = this.pos.toBabylon();
     };
 
-    //attractor class
+    //snake class
     function Snake(x, y, z, radius, scene) {
         this.meshs = [];
+        this.distances = [];
+        this.points = [];
 
+        this.materialt = new BABYLON.StandardMaterial("texture1", scene);
+        this.materialt.alpha = 0;
         this.material = new BABYLON.StandardMaterial("texture1", scene);
-        this.material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+        this.material.diffuseColor = new BABYLON.Color3(0.3, 0.5, 0.1);
+        this.material.specularColor = new BABYLON.Color3(0,0,0);
 
         for (var i = 0; i < 10; i++) {
             this.meshs.push(new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
-                diameter: 2 * radius - (i / 10) * radius * 2 + 5
+                diameter: 4 * radius
             }, scene, false));
 
             this.meshs[i].physicsImpostor = new BABYLON.PhysicsImpostor(this.meshs[i], BABYLON.PhysicsImpostor.SphereImpostor, {
-                mass: 0,
-                restitution: 0.9
+                mass: 0.1,
+                restitution: 0
             }, scene);
 
-            this.meshs[i].position.x = x;
+            this.distances.push(radius);
+
+            this.meshs[i].position.x = x + 20 * i;
             this.meshs[i].position.y = y;
             this.meshs[i].position.z = z;
-            this.meshs[i].material = this.material;
+            this.points.push(new BABYLON.Vector3(x + 20 * i, y, z));
+            this.meshs[i].material = this.materialt;
         }
+
+        this.meshs[0].material = this.material;
+
+        this.shape = [];
+
+        for (var i = 0; i < 21; i++) {
+            this.shape.push(new BABYLON.Vector3(Math.cos((i / 20) * Math.PI * 2), Math.sin((i / 20) * Math.PI * 2), 0));
+        }
+        console.log(this.shape);
+
+        this.scaling = function (i, distance) {
+            return radius*2 - (i / 25) * radius;
+        };
+
+        this.catmullRom = BABYLON.Curve3.CreateCatmullRomSpline(this.points, 5, false);
+
+        console.log(this.catmullRom);
+
+        this.extrusion = BABYLON.MeshBuilder.ExtrudeShapeCustom("star", {
+            shape: this.shape,
+            path: this.catmullRom.getPoints(),
+            scaleFunction: this.scaling,
+            sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+            updatable: true
+        }, scene);
+
+        this.extrusion.material = this.material;
+
+        this.maxSpeed = 200;
+        this.maxForce = 10 * this.meshs[0].physicsImpostor.mass;
     }
 
-    Snake.prototype.applyForce = function (force) {
-        this.mesh.physicsImpostor.physicsImpostor.applyForce(force.toBabylon(), this.mesh.getAbsolutePosition());
+    Snake.prototype.applyForce = function (force, j) {
+        this.meshs[j].physicsImpostor.applyForce(force.toBabylon(), this.meshs[j].getAbsolutePosition());
     };
 
     Snake.prototype.update = function (boid) {
+        let target = boid.pos.clone();
+        let desired = Vector.sub(target, fromBabylon(this.meshs[0].position));
+        desired.normalize();
+        desired.mult(this.maxSpeed / 2);
+        let steer = Vector.sub(desired, fromBabylon(this.meshs[0].physicsImpostor.getLinearVelocity()));
+        steer.limit(this.maxForce);
+        this.applyForce(steer, 0);
+        this.points[0] = this.meshs[0].position;
         for (var i = 1; i < this.meshs.length; i++) {
+            /*let d = Vector.sub(fromBabylon(this.meshs[i].position), fromBabylon(this.meshs[i - 1].position));
+            let r = d.mag() / ((this.distances[i] + this.distances[i - 1]) / 4) - 1;
+            //if (d.mag() < this.distances[i]) r = 0;
+            d.normalize();
+            this.meshs[i].position.x -= d.x * r;
+            this.meshs[i].position.y -= d.y * r;
+            this.meshs[i].position.z -= d.z * r;*/
 
+            let target = fromBabylon(this.meshs[i - 1].position);
+            let desired = Vector.sub(target, fromBabylon(this.meshs[i].position));
+            let d = desired.dot(desired);
+            if (d > 30) {
+                desired.normalize();
+                desired.mult(this.maxSpeed);
+                let steer = Vector.sub(desired, fromBabylon(this.meshs[i].physicsImpostor.getLinearVelocity()));
+                steer.limit(this.maxForce);
+                this.applyForce(steer, i);
+            }
+            this.points[i] = this.meshs[i].position;
         }
+
+        this.catmullRom = BABYLON.Curve3.CreateCatmullRomSpline(this.points, 5, false);
+
+        this.extrusion = BABYLON.MeshBuilder.ExtrudeShapeCustom("star", {
+            shape: this.shape,
+            path: this.catmullRom.getPoints(),
+            scaleFunction: this.scaling,
+            instance: this.extrusion
+        });
     };
 
     //create Boid
@@ -235,7 +284,7 @@ var createScene = function () {
     //create Snakes
     snakes = [];
     for (var i = 0; i < 1; i++) {
-        snakes.push(new Snake((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, Math.random() * 10 + 1, scene));
+        snakes.push(new Snake((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, 2.3, scene));
     }
 
     //animate

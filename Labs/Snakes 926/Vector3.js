@@ -99,6 +99,9 @@ Vector.prototype = {
     mag: function () {
         return Math.sqrt(this.dot(this));
     },
+    magSq: function () {
+        return this.dot(this);
+    },
     unit: function () {
         return this.div(this.mag());
     },

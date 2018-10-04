@@ -1,0 +1,74 @@
+Exporter version: 5.6.4, Blender version: 2.79 (sub 0)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		export scope        :  ALL
+		inline textures     :  false
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		texture directory   :  /Users/School/Documents/Advanced_Animation/3d model test/
+	Python World class constructor completed
+	processing begun of skeleton:  Armature, id:  0
+		processing begun of bone:  Root, index:  0
+		processing begun of bone:  Torso, index:  1
+		processing begun of bone:  Chest, index:  2
+		processing begun of bone:  Neck, index:  3
+		processing begun of bone:  Head, index:  4
+		processing begun of bone:  Upper Arm.L, index:  5
+		processing begun of bone:  Lower Arm.L, index:  6
+		processing begun of bone:  Hand.L, index:  7
+		processing begun of bone:  Thumb01.L, index:  8
+		processing begun of bone:  Thumb02.L, index:  9
+		processing begun of bone:  Fingers01.L, index:  10
+		processing begun of bone:  Fingers02.L, index:  11
+		processing begun of bone:  Upper Arm.R, index:  12
+		processing begun of bone:  Lower Arm.R, index:  13
+		processing begun of bone:  Hand.R, index:  14
+		processing begun of bone:  Fingers01.R, index:  15
+		processing begun of bone:  Fingers02.R, index:  16
+		processing begun of bone:  Thumb01.R, index:  17
+		processing begun of bone:  Thumb02.R, index:  18
+		processing begun of bone:  Leg pole target.L, index:  19
+		processing begun of bone:  Leg Control.L, index:  20
+		processing begun of bone:  Foot Roll.L, index:  21
+		processing begun of bone:  Leg ik.L, index:  22
+		processing begun of bone:  Upper Leg.L, index:  23
+		processing begun of bone:  Lower Leg.L, index:  24
+		processing begun of bone:  Toes Control.L, index:  25
+		processing begun of bone:  Foot.L, index:  26
+		processing begun of bone:  Toes.L, index:  27
+		processing begun of bone:  Leg pole target.R, index:  28
+		processing begun of bone:  Leg Control.R, index:  29
+		processing begun of bone:  Foot Roll.R, index:  30
+		processing begun of bone:  Leg ik.R, index:  31
+		processing begun of bone:  Upper Leg.R, index:  32
+		processing begun of bone:  Lower Leg.R, index:  33
+		processing begun of bone:  Toes Control.R, index:  34
+		processing begun of bone:  Foot.R, index:  35
+		processing begun of bone:  Toes.R, index:  36
+		processing begun of bone:  Hat, index:  37
+		processing action Run:  in[1 - 17], out[0 - 17]
+		processing action Walk:  in[1 - 33], out[30 - 63]
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  Character
+		processing begun of Standard material:  Character
+			Diffuse texture found "Texture"
+				Image texture found, type:  diffuseTexture, mapped using: "UVMap"
+		num positions      :  1338
+		num normals        :  1338
+		num uvs            :  2676
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  4944
+		Skeleton stats:  
+			Total Influencers:  2785
+			Avg # of influencers per vertex:  2.0815
+			Highest # of influencers observed:  5, num vertices with this:  65
+			exported as 5 influencers
+			num skeletonWeights and skeletonIndices:  10704
+========= Writing of scene file started =========
+========= Writing of scene file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.9397 secs

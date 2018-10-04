@@ -21,12 +21,21 @@ var createScene = function () {
 
     //camera
     var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 200, new BABYLON.Vector3.Zero(), scene);
-    camera.setTarget(new BABYLON.Vector3(0, 15, 0));
+    camera.setTarget(new BABYLON.Vector3(0, 0, 0));
     camera.attachControl(canvas, true);
 
-    BABYLON.SceneLoader.Append("./", "Wasip Rig.obj", scene, function (scene) {
-        console.log("test");
+    BABYLON.SceneLoader.ImportMesh("", "./", "Simple Character (rigged).babylon", scene, function (newMeshes) {
+        scene.executeWhenReady(function () {
+            console.log(newMeshes);
+            scene.addMesh(newMeshes[0]);
+            scene.beginAnimation(scene.getSkeletonById(0), 1, 61, !0, 1);
+        });
     });
+
+
+    /*BABYLON.SceneLoader.Append("./", "Wasip Rig.obj", scene, function (scene) {
+        console.log("test");
+    });*/
 
     //var vbox = BABYLON.Mesh.CreateBox("box", 10.0, scene, false);
 

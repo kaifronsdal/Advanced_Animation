@@ -12,5 +12,6 @@
     <orderEntry type="library" name="babylon.gui" level="application" />
     <orderEntry type="library" name="babylon.max" level="application" />
     <orderEntry type="library" name="oimo" level="application" />
+    <orderEntry type="library" name="babylonjs.loaders" level="application" />
   </component>
 </module>

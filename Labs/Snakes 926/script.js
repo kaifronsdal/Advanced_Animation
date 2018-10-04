@@ -206,15 +206,11 @@ var createScene = function () {
         for (var i = 0; i < 21; i++) {
             this.shape.push(new BABYLON.Vector3(Math.cos((i / 20) * Math.PI * 2), Math.sin((i / 20) * Math.PI * 2), 0));
         }
-        console.log(this.shape);
-
         this.scaling = function (i, distance) {
             return radius*2 - (i / 25) * radius;
         };
 
         this.catmullRom = BABYLON.Curve3.CreateCatmullRomSpline(this.points, 5, false);
-
-        console.log(this.catmullRom);
 
         this.extrusion = BABYLON.MeshBuilder.ExtrudeShapeCustom("star", {
             shape: this.shape,
@@ -275,16 +271,29 @@ var createScene = function () {
         });
     };
 
+    function closestBoid(snake, boids) {
+        var ind = 0;
+        var dist = Number.MAX_VALUE;
+        for (var i = 0; i < boids.length; i++) {
+            var td = Math.pow(snake.meshs[0].position.x-boids[i].mesh.position.x, 2) + Math.pow(snake.meshs[0].position.y-boids[i].mesh.position.y, 2) + Math.pow(snake.meshs[0].position.z-boids[i].mesh.position.z, 2);
+            if (td < dist) {
+                dist = td;
+                ind = i;
+            }
+        }
+        return ind;
+    }
+
     //create Boid
     boids = [];
-    for (var i = 0; i < 1; i++) {
-        boids.push(new Boid((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, Math.random() * 10 + 1, scene, i));
+    for (var i = 0; i < 10; i++) {
+        boids.push(new Boid((Math.random() - 0.5) * width, (Math.random() - 0.5) * height, (Math.random() - 0.5) * length, Math.random() * 10 + 1, scene, i));
     }
 
     //create Snakes
     snakes = [];
-    for (var i = 0; i < 1; i++) {
-        snakes.push(new Snake((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, 2.3, scene));
+    for (var i = 0; i < 10; i++) {
+        snakes.push(new Snake((Math.random() - 0.5) * width, (Math.random() - 0.5) * height, (Math.random() - 0.5) * length, 2.3, scene));
     }
 
     //animate
@@ -294,7 +303,8 @@ var createScene = function () {
         }
 
         for (let i = 0; i < snakes.length; i++) {
-            snakes[i].update(boids[0]);
+            let c = closestBoid(snakes[i], boids);
+            snakes[i].update(boids[c]);
         }
     });
 

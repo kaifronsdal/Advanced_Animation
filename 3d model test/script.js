@@ -26,11 +26,15 @@ var createScene = function () {
 
     BABYLON.SceneLoader.ImportMesh("", "./", "Simple Character (rigged).babylon", scene, function (newMeshes) {
         scene.executeWhenReady(function () {
-            console.log(newMeshes);
+            console.log(scene.getSkeletonById(0));
             scene.addMesh(newMeshes[0]);
-            scene.beginAnimation(scene.getSkeletonById(0), 1, 61, !0, 1);
+            newMeshes[0].scaling = new BABYLON.Vector3(50, 50, 50);
+            scene.beginAnimation(scene.getSkeletonById(0)._ranges.Run, 0, 100, true);//run
+            //scene.beginAnimation(scene.getSkeletonById(0), 32, 62, true);//walk
         });
     });
+
+    //var particleSystem = new BABYLON.GPUParticleSystem("particles", { capacity:1000 }, scene);
 
 
     /*BABYLON.SceneLoader.Append("./", "Wasip Rig.obj", scene, function (scene) {

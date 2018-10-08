@@ -126,7 +126,7 @@ var createScene = function () {
     };
 
     Boid.prototype.update = function () {
-        //check edges
+        //check if boid is past boundary
         if (this.pos.x < -width / 2 || this.pos.x > width / 2) {
             this.pos.x /= Math.abs(this.pos.x);
             this.pos.x *= -1;
@@ -144,16 +144,23 @@ var createScene = function () {
         }
 
         //steer in toward random point projected in front of boid
-        let projDist = 50;
-        let projVecDir = this.vel.clone().normalize().mult(projDist);
+        //An image of what's happening in 2 dimensions --> https://natureofcode.com/book/imgs/chapter06/ch06_12.png
+        //see also The Nature of Code chap 6.5
+
+        //project a point in front of the the boid (in direction of current velocity)
+        let projVecDir = this.vel.clone().normalize().mult(50);
         let projectVec = this.pos.clone().add(projVecDir);
 
+        //update angles by random amount (moves point around sphere)
         this.theta += (Math.random() - 0.5) * 2 * 15 / 180 * Math.PI;
         this.alpha += (Math.random() - 0.5) * 2 * 15 / 180 * Math.PI;
 
-        let sp = new Vector(Math.cos(this.theta) * Math.sin(this.alpha), Math.cos(this.alpha) * Math.sin(this.theta), Math.cos(this.alpha));
-        let projPoint = projectVec.add(sp.mult(30));
+        //find a point on a sphere given by the two angles theta and alpha
+        let spherePoint = new Vector(Math.cos(this.theta) * Math.sin(this.alpha), Math.cos(this.alpha) * Math.sin(this.theta), Math.cos(this.alpha));
+        //move the point on the sphere to the projected point (projectVec) in front of the boid
+        let projPoint = projectVec.add(spherePoint.mult(30));
 
+        //steer toward projPoint
         let desired = projPoint.sub(this.pos);
         desired.normalize();
         desired.mult(this.maxSpeed);
@@ -170,16 +177,24 @@ var createScene = function () {
 
     //snake class
     function Snake(x, y, z, radius, scene) {
+        //this.meshes contains each segment of the snake to apply updates to
         this.meshs = [];
-        this.distances = [];
+        //this.points contains points along a spline through this.meshs positions
         this.points = [];
 
+        this.radius = radius;
+
+        //material to make segments transparent
+        //the reason to have meshs for each segment as apposed to just positions is to allow collisions that are easy to compute
         this.materialt = new BABYLON.StandardMaterial("texture1", scene);
         this.materialt.alpha = 0;
+
+        //material of snake body
         this.material = new BABYLON.StandardMaterial("texture1", scene);
         this.material.diffuseColor = new BABYLON.Color3(0.3, 0.5, 0.1);
         this.material.specularColor = new BABYLON.Color3(0,0,0);
 
+        //create segments of snake
         for (var i = 0; i < 10; i++) {
             this.meshs.push(new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
                 diameter: 4 * radius
@@ -190,8 +205,6 @@ var createScene = function () {
                 restitution: 0
             }, scene);
 
-            this.distances.push(radius);
-
             this.meshs[i].position.x = x + 20 * i;
             this.meshs[i].position.y = y;
             this.meshs[i].position.z = z;
@@ -199,24 +212,31 @@ var createScene = function () {
             this.meshs[i].material = this.materialt;
         }
 
+        //the first segment of the snake (head) is colored
         this.meshs[0].material = this.material;
 
+        //create an array of points that correspond to a circle
+        //this allows us to make the snake round
         this.shape = [];
 
         for (var i = 0; i < 21; i++) {
             this.shape.push(new BABYLON.Vector3(Math.cos((i / 20) * Math.PI * 2), Math.sin((i / 20) * Math.PI * 2), 0));
         }
+
+        //make the snake get smaller the closer you get to the tail
         this.scaling = function (i, distance) {
             return radius*2 - (i / 25) * radius;
         };
 
+        //generate points between each of the segments to make the snake smooth and not blocky
         this.catmullRom = BABYLON.Curve3.CreateCatmullRomSpline(this.points, 5, false);
 
-        this.extrusion = BABYLON.MeshBuilder.ExtrudeShapeCustom("star", {
+        //the actual visible mesh of the snake
+        this.extrusion = BABYLON.MeshBuilder.ExtrudeShapeCustom("snake", {
             shape: this.shape,
             path: this.catmullRom.getPoints(),
             scaleFunction: this.scaling,
-            sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+            sideOrientation: BABYLON.Mesh.FRONTSIDE,
             updatable: true
         }, scene);
 
@@ -231,6 +251,7 @@ var createScene = function () {
     };
 
     Snake.prototype.update = function (boid) {
+        //steer the head of the snake (first segment) toward the given boid
         let target = boid.pos.clone();
         let desired = Vector.sub(target, fromBabylon(this.meshs[0].position));
         desired.normalize();
@@ -239,15 +260,9 @@ var createScene = function () {
         steer.limit(this.maxForce);
         this.applyForce(steer, 0);
         this.points[0] = this.meshs[0].position;
-        for (var i = 1; i < this.meshs.length; i++) {
-            /*let d = Vector.sub(fromBabylon(this.meshs[i].position), fromBabylon(this.meshs[i - 1].position));
-            let r = d.mag() / ((this.distances[i] + this.distances[i - 1]) / 4) - 1;
-            //if (d.mag() < this.distances[i]) r = 0;
-            d.normalize();
-            this.meshs[i].position.x -= d.x * r;
-            this.meshs[i].position.y -= d.y * r;
-            this.meshs[i].position.z -= d.z * r;*/
 
+        //for every other segment, check to see if the distance between itself and the previous segment is less than 30, then steer toward it
+        for (var i = 1; i < this.meshs.length; i++) {
             let target = fromBabylon(this.meshs[i - 1].position);
             let desired = Vector.sub(target, fromBabylon(this.meshs[i].position));
             let d = desired.dot(desired);
@@ -261,6 +276,7 @@ var createScene = function () {
             this.points[i] = this.meshs[i].position;
         }
 
+        //update the spline and extrusion for new segment positions
         this.catmullRom = BABYLON.Curve3.CreateCatmullRomSpline(this.points, 5, false);
 
         this.extrusion = BABYLON.MeshBuilder.ExtrudeShapeCustom("star", {
@@ -271,6 +287,7 @@ var createScene = function () {
         });
     };
 
+    //find the closest boid to a given snake
     function closestBoid(snake, boids) {
         var ind = 0;
         var dist = Number.MAX_VALUE;

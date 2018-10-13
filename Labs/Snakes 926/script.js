@@ -20,14 +20,13 @@ var createScene = function () {
     light3.intensity = 0.8;
 
     //skybox
-    var skybox = BABYLON.MeshBuilder.CreateSphere("skyBox", {diameter: 10000}, scene);
-    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-    skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("https://www.babylonjs.com/assets/skybox/nebula", scene);
-    skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    skybox.material = skyboxMaterial;
+    var skybox = BABYLON.MeshBuilder.CreateSphere("skyBox", {diameter: 1000}, scene);
+    var gradientMaterial = new BABYLON.GradientMaterial("grad", scene);
+    gradientMaterial.topColor = new BABYLON.Color3(0, 0, 1);
+    gradientMaterial.bottomColor = new BABYLON.Color3(0, 0, 0);
+    gradientMaterial.offset = 0;
+    gradientMaterial.smoothness = 0.01;
+    skybox.material = gradientMaterial;
 
     //camera
     var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 200, new BABYLON.Vector3.Zero(), scene);
@@ -156,6 +155,7 @@ var createScene = function () {
         this.alpha += (Math.random() - 0.5) * 2 * 15 / 180 * Math.PI;
 
         //find a point on a sphere given by the two angles theta and alpha
+        //se --> https://stackoverflow.com/questions/1568568/how-to-convert-euler-angles-to-directional-vector
         let spherePoint = new Vector(Math.cos(this.theta) * Math.sin(this.alpha), Math.cos(this.alpha) * Math.sin(this.theta), Math.cos(this.alpha));
         //move the point on the sphere to the projected point (projectVec) in front of the boid
         let projPoint = projectVec.add(spherePoint.mult(30));
@@ -261,7 +261,7 @@ var createScene = function () {
         this.applyForce(steer, 0);
         this.points[0] = this.meshs[0].position;
 
-        //for every other segment, check to see if the distance between itself and the previous segment is less than 30, then steer toward it
+        //for every other segment, check to see if the distance between itself and the previous segment is less than sqrt(30), then steer toward it
         for (var i = 1; i < this.meshs.length; i++) {
             let target = fromBabylon(this.meshs[i - 1].position);
             let desired = Vector.sub(target, fromBabylon(this.meshs[i].position));

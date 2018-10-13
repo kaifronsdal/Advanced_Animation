@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1548d791-2c2f-469d-b67a-940f5d3f910d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Labs/Flocking/Vector3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Labs/Flocking/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Labs/Flocking/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Advanced_Animation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Advanced_Animation.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Labs/Snakes 926/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Labs/Snakes 926/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Labs/Snakes 926/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/Labs/Snakes 926/script.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -18,43 +23,46 @@
     <session id="666065474">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.24" value="1" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="8" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="fx" value="2" />
           <entry key="gitignore" value="1" />
-          <entry key="html" value="26" />
-          <entry key="js" value="40" />
+          <entry key="html" value="31" />
+          <entry key="js" value="48" />
           <entry key="log" value="2" />
           <entry key="vi" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="26" />
-          <entry key="JavaScript" value="40" />
+          <entry key="HTML" value="31" />
+          <entry key="JavaFX" value="2" />
+          <entry key="JavaScript" value="48" />
           <entry key="PLAIN_TEXT" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="6" />
-          <entry key="html" value="321" />
-          <entry key="js" value="14244" />
+          <entry key="html" value="381" />
+          <entry key="js" value="15945" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="321" />
-          <entry key="JavaScript" value="14244" />
+          <entry key="HTML" value="381" />
+          <entry key="JavaScript" value="15945" />
           <entry key="PLAIN_TEXT" value="6" />
         </counts>
       </usages-collector>
@@ -65,47 +73,52 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Labs/Snakes 926/index.html">
+        <entry file="file://$PROJECT_DIR$/Labs/Flocking/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" column="54" selection-start-line="26" selection-start-column="54" selection-end-line="26" selection-end-column="54" />
+            <state relative-caret-position="165">
+              <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/3d model test/index.html">
+        <entry file="file://$PROJECT_DIR$/Ecosystem/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="24" lean-forward="true" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+            <state relative-caret-position="435">
+              <caret line="29" column="37" selection-start-line="23" selection-start-column="4" selection-end-line="29" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Labs/Snakes 926/script.js">
+        <entry file="file://$PROJECT_DIR$/Labs/Flocking/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+            <state relative-caret-position="17">
+              <caret line="151" column="47" selection-start-line="151" selection-start-column="47" selection-end-line="151" selection-end-column="47" />
               <folding>
-                <element signature="e#1794#3981#0" />
-                <element signature="e#4078#5001#0" />
-                <element signature="e#5052#5088#0" />
-                <element signature="e#5131#6711#0" />
-                <element signature="e#6775#8786#0" />
-                <element signature="e#8841#8954#0" />
-                <element signature="e#9002#10812#0" />
-                <element signature="e#10854#11311#0" />
+                <element signature="e#1955#4142#0" />
+                <element signature="e#5213#5249#0" />
+                <element signature="e#6389#6834#0" />
+                <element signature="e#7071#7789#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/3d model test/script.js">
+        <entry file="file://$PROJECT_DIR$/Labs/Flocking/Vector3.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="31" column="90" lean-forward="true" selection-start-line="31" selection-start-column="90" selection-end-line="31" selection-end-column="90" />
+            <state relative-caret-position="-324">
+              <caret line="66" column="26" selection-start-line="66" selection-start-column="26" selection-end-line="66" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Labs/Vectors/Vector.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="20" column="2" lean-forward="true" selection-start-line="16" selection-start-column="19" selection-end-line="20" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -150,7 +163,6 @@
         <option value="$PROJECT_DIR$/swerve Drive test/script.js" />
         <option value="$PROJECT_DIR$/Ecosystem/index.html" />
         <option value="$PROJECT_DIR$/Ecosystem/script.js" />
-        <option value="$PROJECT_DIR$/Labs/Snakes 926/index.html" />
         <option value="$PROJECT_DIR$/Ecosystem/Vector3.js" />
         <option value="$PROJECT_DIR$/Labs/Snakes 926/Vector3.js" />
         <option value="$PROJECT_DIR$/3d model test/Vector3.js" />
@@ -158,7 +170,13 @@
         <option value="$PROJECT_DIR$/3d model test/index.html" />
         <option value="$PROJECT_DIR$/3d model test/loaders.js" />
         <option value="$PROJECT_DIR$/3d model test/script.js" />
+        <option value="$PROJECT_DIR$/Labs/Snakes 926/index.html" />
         <option value="$PROJECT_DIR$/Labs/Snakes 926/script.js" />
+        <option value="$PROJECT_DIR$/Labs/Flocking/index.html" />
+        <option value="$PROJECT_DIR$/Labs/Flocking/skybox.fragment.fx" />
+        <option value="$PROJECT_DIR$/Labs/Flocking/skybox.vertex.fx" />
+        <option value="$PROJECT_DIR$/Labs/Flocking/Vector3.js" />
+        <option value="$PROJECT_DIR$/Labs/Flocking/script.js" />
       </list>
     </option>
   </component>
@@ -168,7 +186,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1366" />
     <option name="height" value="696" />
@@ -190,23 +208,29 @@
             <path>
               <item name="Advanced_Animation" type="b2602c69:ProjectViewProjectNode" />
               <item name="Advanced_Animation" type="462c0819:PsiDirectoryNode" />
-              <item name="3d model test" type="462c0819:PsiDirectoryNode" />
+              <item name="3D Basketball Game" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Advanced_Animation" type="b2602c69:ProjectViewProjectNode" />
               <item name="Advanced_Animation" type="462c0819:PsiDirectoryNode" />
-              <item name="Babylon" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Advanced_Animation" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Advanced_Animation" type="462c0819:PsiDirectoryNode" />
-              <item name="Labs" type="462c0819:PsiDirectoryNode" />
+              <item name="Ecosystem" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Advanced_Animation" type="b2602c69:ProjectViewProjectNode" />
               <item name="Advanced_Animation" type="462c0819:PsiDirectoryNode" />
               <item name="Labs" type="462c0819:PsiDirectoryNode" />
-              <item name="Snakes 926" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Advanced_Animation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Advanced_Animation" type="462c0819:PsiDirectoryNode" />
+              <item name="Labs" type="462c0819:PsiDirectoryNode" />
+              <item name="Flocking" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Advanced_Animation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Advanced_Animation" type="462c0819:PsiDirectoryNode" />
+              <item name="Labs" type="462c0819:PsiDirectoryNode" />
+              <item name="Vectors" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -223,6 +247,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Labs" />
       <recent name="$PROJECT_DIR$/Labs/Snakes 926" />
       <recent name="$PROJECT_DIR$/Babylon Basketball Game" />
     </key>
@@ -267,16 +292,16 @@
       <workItem from="1537461379483" duration="2556000" />
       <workItem from="1537979926194" duration="2703000" />
       <workItem from="1538150325851" duration="12194000" />
-      <workItem from="1538496297334" duration="10183000" />
+      <workItem from="1538496297334" duration="15430000" />
+      <workItem from="1539314203828" duration="5038000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57812000" />
+    <option name="totallyTimeSpent" value="68097000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1366" height="696" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1366" height="694" extended-state="6" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24981412" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -352,13 +377,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Babylon/index2.html" />
-    <entry file="file://$PROJECT_DIR$/Labs/Vectors/Vector.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="13" selection-end-line="127" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Labs/Forces/index 2.html" />
     <entry file="file://$PROJECT_DIR$/Labs/Forces/Mover.js" />
     <entry file="file://$PROJECT_DIR$/Labs/Forces/Vector3.js">
@@ -379,46 +397,11 @@
     <entry file="file://$PROJECT_DIR$/Babylon Basketball Game/index 2.html" />
     <entry file="file://$PROJECT_DIR$/Babylon Basketball Game/test.js" />
     <entry file="file://$PROJECT_DIR$/swerve Drive test/index.html" />
-    <entry file="file://$PROJECT_DIR$/Babylon Basketball Game/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="32" column="72" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/swerve Drive test/script.js" />
-    <entry file="file://$PROJECT_DIR$/3D Basketball Game/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="559" column="40" selection-start-line="559" selection-start-column="40" selection-end-line="559" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Babylon Basketball Game/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="34" column="47" selection-start-line="34" selection-end-line="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Labs/Angular Velocity/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="22" lean-forward="true" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Ecosystem/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="24" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Ecosystem/Vector3.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="234" column="2" lean-forward="true" selection-start-line="234" selection-start-column="2" selection-end-line="237" selection-end-column="2" />
         </state>
       </provider>
     </entry>
@@ -429,13 +412,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Labs/Angular Velocity/script.js">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Ecosystem/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1567">
-          <caret line="125" column="84" lean-forward="true" selection-start-line="125" selection-start-column="84" selection-end-line="125" selection-end-column="84" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Labs/Forces/index.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -465,13 +441,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Babylon/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="7" lean-forward="true" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Babylon/script.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="103">
@@ -496,16 +465,38 @@
     <entry file="file://$PROJECT_DIR$/3d model test/Simple Character (rigged).log">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/3d model test/index2.html">
+    <entry file="file://$PROJECT_DIR$/3d model test/index2.html" />
+    <entry file="file://$PROJECT_DIR$/Babylon Basketball Game/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="54" column="56" lean-forward="true" selection-start-line="54" selection-start-column="56" selection-end-line="54" selection-end-column="56" />
+        <state relative-caret-position="414">
+          <caret line="34" column="47" selection-start-line="34" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Babylon/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="7" lean-forward="true" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Babylon Basketball Game/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-553">
+          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Ecosystem/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="24" selection-end-column="67" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/3d model test/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
+        <state relative-caret-position="465">
           <caret line="31" column="90" lean-forward="true" selection-start-line="31" selection-start-column="90" selection-end-line="31" selection-end-column="90" />
         </state>
       </provider>
@@ -513,7 +504,7 @@
     <entry file="file://$PROJECT_DIR$/Labs/Snakes 926/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
-          <caret line="26" column="54" selection-start-line="26" selection-start-column="54" selection-end-line="26" selection-end-column="54" />
+          <caret line="26" column="93" selection-start-line="26" selection-start-column="93" selection-end-line="26" selection-end-column="93" />
         </state>
       </provider>
     </entry>
@@ -524,19 +515,80 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Ecosystem/Vector3.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="79">
+          <caret line="82" column="25" selection-start-line="82" selection-start-column="25" selection-end-line="82" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Labs/Snakes 926/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+        <state relative-caret-position="293">
+          <caret line="151" lean-forward="true" selection-start-line="151" selection-end-line="151" />
           <folding>
             <element signature="e#1794#3981#0" />
             <element signature="e#4078#5001#0" />
             <element signature="e#5052#5088#0" />
-            <element signature="e#5131#6711#0" />
-            <element signature="e#6775#8786#0" />
             <element signature="e#8841#8954#0" />
-            <element signature="e#9002#10812#0" />
             <element signature="e#10854#11311#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D Basketball Game/3dindex.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="38" column="13" lean-forward="true" selection-start-line="30" selection-start-column="12" selection-end-line="38" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D Basketball Game/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="167" lean-forward="true" selection-start-line="167" selection-end-line="167" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Labs/Flocking/skybox.vertex.fx" />
+    <entry file="file://$PROJECT_DIR$/Labs/Flocking/skybox.fragment.fx" />
+    <entry file="file://$PROJECT_DIR$/Ecosystem/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="37" selection-start-line="23" selection-start-column="4" selection-end-line="29" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Labs/Vectors/Vector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="20" column="2" lean-forward="true" selection-start-line="16" selection-start-column="19" selection-end-line="20" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Labs/Flocking/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Labs/Flocking/Vector3.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-324">
+          <caret line="66" column="26" selection-start-line="66" selection-start-column="26" selection-end-line="66" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Labs/Flocking/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="151" column="47" selection-start-line="151" selection-start-column="47" selection-end-line="151" selection-end-column="47" />
+          <folding>
+            <element signature="e#1955#4142#0" />
+            <element signature="e#5213#5249#0" />
+            <element signature="e#6389#6834#0" />
+            <element signature="e#7071#7789#0" />
           </folding>
         </state>
       </provider>

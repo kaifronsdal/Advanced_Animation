@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1548d791-2c2f-469d-b67a-940f5d3f910d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Labs/Flocking/Vector3.js" beforeDir="false" afterPath="$PROJECT_DIR$/Labs/Flocking/Vector3.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Labs/Flocking/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/Labs/Flocking/script.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -53,13 +51,13 @@
         <counts>
           <entry key="gitignore" value="6" />
           <entry key="html" value="381" />
-          <entry key="js" value="17934" />
+          <entry key="js" value="18681" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="381" />
-          <entry key="JavaScript" value="17934" />
+          <entry key="JavaScript" value="18681" />
           <entry key="PLAIN_TEXT" value="6" />
         </counts>
       </usages-collector>
@@ -81,14 +79,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Labs/Flocking/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="327" column="59" selection-start-line="327" selection-start-column="59" selection-end-line="327" selection-end-column="59" />
+            <state relative-caret-position="385">
+              <caret line="160" column="8" selection-start-line="160" selection-start-column="8" selection-end-line="160" selection-end-column="8" />
               <folding>
                 <element signature="e#1955#4142#0" />
-                <element signature="e#7590#7994#0" />
-                <element signature="e#8044#8528#0" />
-                <element signature="e#8578#9096#0" />
-                <element signature="e#9143#9784#0" />
+                <element signature="e#6318#7729#0" />
                 <element signature="e#11366#11416#0" />
                 <element signature="e#10584#10608#0" />
               </folding>
@@ -99,8 +94,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Labs/Flocking/Vector3.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="244" column="19" lean-forward="true" selection-start-line="244" selection-end-line="244" selection-end-column="19" />
+            <state relative-caret-position="250">
+              <caret line="208" column="12" selection-start-line="208" selection-start-column="7" selection-end-line="208" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -119,6 +114,7 @@
     <findStrings>
       <find>length</find>
       <find>distance</find>
+      <find>conso</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -266,12 +262,12 @@
       <workItem from="1538496297334" duration="15430000" />
       <workItem from="1539314203828" duration="5038000" />
       <workItem from="1539387064238" duration="235000" />
-      <workItem from="1539705835386" duration="7096000" />
+      <workItem from="1539705835386" duration="8688000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75428000" />
+    <option name="totallyTimeSpent" value="77020000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1366" height="688" extended-state="0" />
@@ -542,21 +538,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Labs/Flocking/Vector3.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="244" column="19" lean-forward="true" selection-start-line="244" selection-end-line="244" selection-end-column="19" />
+        <state relative-caret-position="250">
+          <caret line="208" column="12" selection-start-line="208" selection-start-column="7" selection-end-line="208" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Labs/Flocking/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="327" column="59" selection-start-line="327" selection-start-column="59" selection-end-line="327" selection-end-column="59" />
+        <state relative-caret-position="385">
+          <caret line="160" column="8" selection-start-line="160" selection-start-column="8" selection-end-line="160" selection-end-column="8" />
           <folding>
             <element signature="e#1955#4142#0" />
-            <element signature="e#7590#7994#0" />
-            <element signature="e#8044#8528#0" />
-            <element signature="e#8578#9096#0" />
-            <element signature="e#9143#9784#0" />
+            <element signature="e#6318#7729#0" />
             <element signature="e#11366#11416#0" />
             <element signature="e#10584#10608#0" />
           </folding>

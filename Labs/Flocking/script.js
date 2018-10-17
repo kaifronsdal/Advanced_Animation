@@ -92,6 +92,8 @@ var createScene = function () {
     function Boid(x, y, z, radius, scene, i) {
         this.mesh = i === 0 ? models.wolf : models.wolf.createInstance("i" + i);
         this.rotation = new Vector();
+        this.tang = new Vector();
+        this.curbinormangle = 0;
         this.mesh.position.x = x;
         this.mesh.position.y = y;
         this.mesh.position.z = z;
@@ -139,16 +141,7 @@ var createScene = function () {
             this.pos.z = -length / 2;
         }
 
-        /*let sep = this.separate(boids).mult(1);
-        let coh = this.cohesion(boids).mult(3);
-        let ali = this.align(boids).mult(1);
-
-        this.applyForce(sep);
-        this.applyForce(coh);
-        this.applyForce(ali);*/
         this.flockOpt(boids);
-
-        //this.acc.limit(this.maxForce);
 
         //update movement variables
         this.vel.add(this.acc);
@@ -156,8 +149,17 @@ var createScene = function () {
         this.vel.setMag(this.maxSpeed);
         this.pos.add(this.vel);
         this.mesh.position = this.pos.toBabylon();
+        //rotate
         this.rotation = this.vel.clone();
-        this.mesh.lookAt(this.rotation.add(this.pos).toBabylon());
+        //approximate binormal vector to find angle to rotate dog on roll axis
+        let oldtang = this.tang.clone();
+        this.tang = this.vel.clone().unit();
+        let norm = this.tang.clone().sub(oldtang);
+        this.binorm = Vector.cross(this.tang, norm);
+        let c = Vector.angleBetween(new Vector(0, 1, 0), this.binorm)*2-Math.PI;
+        this.curbinormangle -= c > - 10 ? (this.curbinormangle - c)/50 : 0;
+
+        this.mesh.lookAt(this.rotation.add(this.pos).toBabylon(), 0, 0, this.curbinormangle);
         this.acc.mult(0);
     };
 
@@ -206,93 +208,6 @@ var createScene = function () {
         this.acc.add(Vector.mult(ali, 1));
         this.acc.add(Vector.mult(coh, 3));
         this.acc.add(Vector.mult(sep, 1));
-    };
-
-    Boid.prototype.seek = function (target) {
-        let desired = target;
-        desired.sub(this.pos);
-        var d = desired.mag();
-        desired.normalize();
-        if (d < 100) {
-            d /= 100;
-            d *= this.maxSpeed;
-            desired.mult(d);
-        }
-        else {
-            desired.mult(this.maxSpeed);
-        }
-        desired.sub(this.vel);
-        desired.limit(this.maxforce);
-
-        return desired;
-    };
-
-    Boid.prototype.separate = function (boids) {
-        let neighborDist = 50;
-        let posSum = new Vector(0, 0, 0);
-        var repulse;
-        for (var i = 0; i < boids.length; i++) {
-            let b = boids[i];
-            let d = Vector.dist(this.pos, b.pos);
-            if (d > 0 && d <= neighborDist) {
-                repulse = Vector.sub(this.pos, b.pos);
-                repulse.normalize();
-                repulse.div(d);
-                posSum.add(repulse);
-            }
-        }
-        return posSum;
-    };
-
-    Boid.prototype.cohesion = function (boids) {
-        let neighborDist = 50 * 50;
-
-        let sum = new Vector();
-
-        let count = 0;
-        for (var i = 0; i < boids.length; i++) {
-            let dist = (this.pos.clone()).sub(boids[i].pos);
-            let d = dist.magSq();
-
-
-            if ((d > 0) && (d < neighborDist)) {
-                sum.add(boids[i].pos);
-                count++;
-            }
-        }
-        if (count > 0) {
-            sum.div(count);
-
-            return this.seek(sum);
-        }
-        return new Vector(0, 0, 0);
-    };
-
-    Boid.prototype.align = function (boids) {
-        let neighborDist = 100 * 100;
-
-        let sum = new Vector();
-        let count = 0;
-        for (var i = 0; i < boids.length; i++) {
-            let dist = (this.pos.clone()).sub(boids[i].pos);
-            let d = dist.magSq();
-
-
-            if ((d > 0) && (d < neighborDist)) {
-                sum.add(boids[i].vel);
-                count++;
-            }
-        }
-        if (count > 0) {
-            sum.div(boids.length);
-            sum.setMag(this.maxSpeed);
-
-            let steer = Vector.sub(sum, this.vel);
-            steer.limit(this.maxForce);
-
-            return steer;
-        }
-        return new Vector();
     };
 
     //create Boid

@@ -1,5 +1,6 @@
+var models = {};
+
 var createScene = function () {
-    var scene = new BABYLON.Scene(engine);
     var gravityVector = new BABYLON.Vector3(0, 0, 0);
     var physicsPlugin = new BABYLON.CannonJSPlugin();
     scene.enablePhysics(gravityVector, physicsPlugin);
@@ -32,11 +33,6 @@ var createScene = function () {
     skyboxMaterial.emissiveTexture = new BABYLON.Texture("https://i.imgur.com/EbtfXWV.png", scene);
     skyboxMaterial.ambientTexture = new BABYLON.Texture("https://i.imgur.com/EbtfXWV.png", scene);
     skybox.material = skyboxMaterial;
-
-    //camera
-    var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 200, new BABYLON.Vector3.Zero(), scene);
-    camera.setTarget(new BABYLON.Vector3(0, 15, 0));
-    camera.attachControl(canvas, true);
 
 
     var width = 1000;
@@ -94,9 +90,8 @@ var createScene = function () {
 
     //boid class
     function Boid(x, y, z, radius, scene, i) {
-        this.mesh = new BABYLON.MeshBuilder.CreateSphere("sphere" + Math.random(), {
-            diameter: 2 * radius
-        }, scene, false);
+        this.mesh = i === 0 ? models.wolf : models.wolf.createInstance("i" + i);
+        this.rotation = new Vector();
         this.mesh.position.x = x;
         this.mesh.position.y = y;
         this.mesh.position.z = z;
@@ -106,7 +101,7 @@ var createScene = function () {
         this.acc = new Vector(0, 0, 0);
 
         this.maxSpeed = 4;
-        this.maxForce = 0.3;
+        this.maxForce = 0.03;
 
         this.radius = radius + 2;
 
@@ -114,10 +109,6 @@ var createScene = function () {
             mass: 1,
             restitution: 0.9
         }, scene);
-
-        this.material = new BABYLON.StandardMaterial("texture1", scene);
-        this.material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-        this.mesh.material = this.material;
 
         this.theta = 0;
         this.alpha = 0;
@@ -148,25 +139,76 @@ var createScene = function () {
             this.pos.z = -length / 2;
         }
 
-        let sep = this.separate(boids).mult(2.5);
-        let coh = this.cohesion(boids).mult(0.4);
-        let ali = this.align(boids).mult(1.6);
+        /*let sep = this.separate(boids).mult(1);
+        let coh = this.cohesion(boids).mult(3);
+        let ali = this.align(boids).mult(1);
 
         this.applyForce(sep);
         this.applyForce(coh);
-        this.applyForce(ali);
+        this.applyForce(ali);*/
+        this.flockOpt(boids);
 
         //this.acc.limit(this.maxForce);
 
         //update movement variables
         this.vel.add(this.acc);
-        this.acc.mult(0);
-        this.vel.limit(this.maxSpeed);
+        //this.vel.limit(this.maxSpeed);
+        this.vel.setMag(this.maxSpeed);
         this.pos.add(this.vel);
         this.mesh.position = this.pos.toBabylon();
+        this.rotation = this.vel.clone();
+        this.mesh.lookAt(this.rotation.add(this.pos).toBabylon());
+        this.acc.mult(0);
     };
 
-    Boid.prototype.seek = function(target) {
+    Boid.prototype.flockOpt = function (boids) {
+        let neighborDist = 100;
+        //align
+        let velSum = new Vector();
+        //cohesion
+        let posSum = new Vector();
+        //separate
+        let posSum2 = new Vector();
+        let repulse;
+
+        let count = 0;
+        for (var i = 0; i < boids.length; i++) {
+            let b = boids[i];
+            let d = Vector.dist(this.pos, b.pos);
+
+            if (d > 0 && d <= neighborDist) {
+                //sum velocities
+                velSum.add(b.vel);
+                //sum positions
+                posSum.add(b.pos);
+                //for each pair, this + a boid, find the unit vector between them and scale its magnitude based on distance
+                repulse = Vector.sub(this.pos, b.pos);
+                repulse.normalize();
+                repulse.div(d);
+                posSum2.add(repulse);
+                count++;
+            }
+        }
+        if (count > 0) {
+            //average velocities and positions
+            velSum.div(count);
+            velSum.limit(this.maxForce);
+            posSum.div(count);
+        }
+        let ali = velSum;
+
+        //steer toward average positions
+        let steer = Vector.sub(posSum, this.pos);
+        steer.limit(this.maxForce);
+        let coh = steer;
+
+        let sep = posSum2;
+        this.acc.add(Vector.mult(ali, 1));
+        this.acc.add(Vector.mult(coh, 3));
+        this.acc.add(Vector.mult(sep, 1));
+    };
+
+    Boid.prototype.seek = function (target) {
         let desired = target;
         desired.sub(this.pos);
         var d = desired.mag();
@@ -186,32 +228,20 @@ var createScene = function () {
     };
 
     Boid.prototype.separate = function (boids) {
-        let desiredSep = 50*50;
-        let sum = new Vector();
-        let count = 0;
-
+        let neighborDist = 50;
+        let posSum = new Vector(0, 0, 0);
+        var repulse;
         for (var i = 0; i < boids.length; i++) {
-            let dist = (this.pos.clone()).sub(boids[i].pos);
-            let d = dist.magSq();
-
-
-            if ((d > 0) && (d < desiredSep)) {
-                count++;
-                dist.normalize();
-                //dist.div(Math.sqrt(d)*10);
-                sum.add(dist);
+            let b = boids[i];
+            let d = Vector.dist(this.pos, b.pos);
+            if (d > 0 && d <= neighborDist) {
+                repulse = Vector.sub(this.pos, b.pos);
+                repulse.normalize();
+                repulse.div(d);
+                posSum.add(repulse);
             }
         }
-        if (count > 0) {
-            sum.div(count);
-            sum.setMag(this.maxSpeed);
-
-            let steer = Vector.sub(sum, this.vel);
-            steer.limit(this.maxForce);
-
-            return steer;
-        }
-        return new Vector();
+        return posSum;
     };
 
     Boid.prototype.cohesion = function (boids) {
@@ -286,7 +316,19 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var engine = new BABYLON.Engine(canvas, true, {preserveDrawingBuffer: true, stencil: true});
-var scene = createScene();
+var scene = new BABYLON.Scene(engine);
+//camera
+var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 200, new BABYLON.Vector3.Zero(), scene);
+camera.setTarget(new BABYLON.Vector3(0, 0, 0));
+camera.attachControl(canvas, true);
+
+BABYLON.SceneLoader.ImportMesh("", "./", "Wolf.babylon", scene, function (newMeshes) {
+    scene.executeWhenReady(function () {
+        models.wolf = newMeshes[0];
+        models.wolf.scaling = new BABYLON.Vector3(5, 5, 5);
+        createScene();
+    });
+});
 
 engine.runRenderLoop(function () {
     if (scene) {

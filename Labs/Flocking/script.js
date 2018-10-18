@@ -199,15 +199,15 @@ var createScene = function () {
         }
         let ali = velSum;
 
-        //steer toward average positions
+        //steer toward average positions for cohesion
         let steer = Vector.sub(posSum, this.pos);
         steer.limit(this.maxForce);
         let coh = steer;
 
         let sep = posSum2;
-        this.acc.add(Vector.mult(ali, 1));
-        this.acc.add(Vector.mult(coh, 3));
-        this.acc.add(Vector.mult(sep, 1));
+        this.acc.add(ali.mult(1));
+        this.acc.add(coh.mult(3));
+        this.acc.add(sep.mult(1));
     };
 
     //create Boid

@@ -18,9 +18,38 @@
             height: 100%;
             touch-action: none;
         }
+        #controls {
+            margin: 10px;
+            position: absolute;
+            color: white;
+            font-family: Arial, serif;
+            font-weight: lighter;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
     </style>
 </head>
 <body>
+<div id="controls">
+    <div class="sub">
+        <label for="coh">Cohesion: <span id="output">3.00</span></label>
+        <input type="range" min="0" max="1000" value="300" class="slider" id="coh">
+    </div>
+    <div class="sub">
+        <label for="ali">Align: <span id="output2">1.00</span></label>
+        <input type="range" min="0" max="1000" value="100" class="slider" id="ali">
+    </div>
+    <div class="sub">
+        <label for="sep">Separate: <span id="output3">1.00</span></label>
+        <input type="range" min="0" max="1000" value="100" class="slider" id="sep">
+    </div>
+    <div class="sub">
+        <label for="num"># of Boids: <span id="output4">100&#160;&#160;</span></label>
+        <input type="range" min="1" max="1000" value="100" class="slider" id="num">
+    </div>
+</div>
 <canvas id="renderCanvas"></canvas>
 
 <script src="https://preview.babylonjs.com/cannon.js"></script>

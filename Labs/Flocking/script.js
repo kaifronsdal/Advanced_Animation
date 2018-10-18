@@ -28,18 +28,26 @@ var createScene = function () {
     skybox.rotation.x = Math.PI;
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.diffuseTexture = new BABYLON.Texture("https://i.imgur.com/EbtfXWV.jpg", scene);
+    /*skyboxMaterial.diffuseTexture = new BABYLON.Texture("https://i.imgur.com/EbtfXWV.jpg", scene);
     skyboxMaterial.specularTexture = new BABYLON.Texture("https://i.imgur.com/EbtfXWV.jpg", scene);
     skyboxMaterial.emissiveTexture = new BABYLON.Texture("https://i.imgur.com/EbtfXWV.png", scene);
-    skyboxMaterial.ambientTexture = new BABYLON.Texture("https://i.imgur.com/EbtfXWV.png", scene);
+    skyboxMaterial.ambientTexture = new BABYLON.Texture("https://i.imgur.com/EbtfXWV.png", scene);*/
+    skyboxMaterial.diffuseColor = new BABYLON.Color3.White();
+    skyboxMaterial.specularColor = new BABYLON.Color3.White();
+    skyboxMaterial.ambientColor = new BABYLON.Color3.White();
+    skyboxMaterial.emissiveColor = new BABYLON.Color3.White();
     skybox.material = skyboxMaterial;
+    var hl2 = new BABYLON.HighlightLayer("hl", scene);
+    hl2.addMesh(skybox, BABYLON.Color3.White());
+    hl2.blurHorizontalSize = 0.3;
+    hl2.blurVerticalSize = 0.3;
 
 
     var width = 1000;
     var height = 1000;
     var length = 1000;
     //bounding box
-    {
+    /*{
         var Bmaterial = new BABYLON.StandardMaterial("boundingMaterial", scene);
         Bmaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         Bmaterial.alpha = 0.5;
@@ -49,44 +57,48 @@ var createScene = function () {
         /*b1.physicsImpostor = new BABYLON.PhysicsImpostor(b1, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
-        }, scene);*/
+        }, scene);
         var b2 = BABYLON.MeshBuilder.CreateBox("myBox", {height: height, width: width, depth: 1}, scene);
         b2.position.z = length / 2;
         /*b2.physicsImpostor = new BABYLON.PhysicsImpostor(b2, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
-        }, scene);*/
+        }, scene);
 
         var b3 = BABYLON.MeshBuilder.CreateBox("myBox", {height: height, width: 1, depth: length}, scene);
         b3.position.x = -width / 2;
         /*b3.physicsImpostor = new BABYLON.PhysicsImpostor(b3, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
-        }, scene);*/
+        }, scene);
         var b4 = BABYLON.MeshBuilder.CreateBox("myBox", {height: height, width: 1, depth: length}, scene);
         b4.position.x = width / 2;
         /*b4.physicsImpostor = new BABYLON.PhysicsImpostor(b4, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
-        }, scene);*/
+        }, scene);
 
         var b5 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 1, width: width, depth: length}, scene);
         b5.position.y = -height / 2;
         /*b5.physicsImpostor = new BABYLON.PhysicsImpostor(b5, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
-        }, scene);*/
+        }, scene);
         var b6 = BABYLON.MeshBuilder.CreateBox("myBox", {height: 1, width: width, depth: length}, scene);
         b6.position.y = height / 2;
         /*b6.physicsImpostor = new BABYLON.PhysicsImpostor(b6, BABYLON.PhysicsImpostor.BoxImpostor, {
             mass: 0,
             restitution: 0.9
-        }, scene);*/
+        }, scene);
 
         b1.material = b2.material = b3.material = b4.material = b5.material = b6.material = Bmaterial;
-    }
+    }*/
 
     var boids;
+    var cohw = 3;
+    var aliw = 1;
+    var sepw = 1;
+    var num = 100;
 
     //boid class
     function Boid(x, y, z, radius, scene, i) {
@@ -121,24 +133,44 @@ var createScene = function () {
     };
 
     Boid.prototype.update = function () {
+        let wallDist = 300;
+        let wallForce = 3;
         //check if boid is past boundary
-        if (this.pos.x < -width / 2) {
-            this.pos.x = width / 2;
+        if (this.pos.x < -width / 2 + wallDist) {
+            //this.pos.x = width / 2;
+            let desired = new Vector(this.maxSpeed - this.vel.x, 0, 0);
+            desired.limit(this.maxForce * wallForce);
+            this.applyForce(desired);
         }
-        if (this.pos.x > width / 2) {
-            this.pos.x = -width / 2;
+        if (this.pos.x > width / 2 - wallDist) {
+            //this.pos.x = -width / 2;
+            let desired = new Vector(this.vel.x - this.maxSpeed, 0, 0);
+            desired.limit(this.maxForce * wallForce);
+            this.applyForce(desired);
         }
-        if (this.pos.y < -height / 2) {
-            this.pos.y = height / 2;
+        if (this.pos.y < -height / 2 + wallDist) {
+            //this.pos.y = height / 2;
+            let desired = new Vector(0, this.maxSpeed - this.vel.y, 0);
+            desired.limit(this.maxForce * wallForce);
+            this.applyForce(desired);
         }
-        if (this.pos.y > height / 2) {
-            this.pos.y = -height / 2;
+        if (this.pos.y > height / 2 - wallDist) {
+            //this.pos.y = -height / 2;
+            let desired = new Vector(0, this.vel.y - this.maxSpeed, 0);
+            desired.limit(this.maxForce * wallForce);
+            this.applyForce(desired);
         }
-        if (this.pos.z < -length / 2) {
-            this.pos.z = length / 2;
+        if (this.pos.z < -length / 2 + wallDist) {
+            //this.pos.z = length / 2;
+            let desired = new Vector(0, 0, this.maxSpeed - this.vel.z);
+            desired.limit(this.maxForce * wallForce);
+            this.applyForce(desired);
         }
-        if (this.pos.z > length / 2) {
-            this.pos.z = -length / 2;
+        if (this.pos.z > length / 2 - wallDist) {
+            //this.pos.z = -length / 2;
+            let desired = new Vector(0, 0, this.vel.z - this.maxSpeed);
+            desired.limit(this.maxForce * wallForce);
+            this.applyForce(desired);
         }
 
         this.flockOpt(boids);
@@ -156,8 +188,8 @@ var createScene = function () {
         this.tang = this.vel.clone().unit();
         let norm = this.tang.clone().sub(oldtang);
         this.binorm = Vector.cross(this.tang, norm);
-        let c = Vector.angleBetween(new Vector(0, 1, 0), this.binorm)*2-Math.PI;
-        this.curbinormangle -= c > - 10 ? (this.curbinormangle - c)/50 : 0;
+        let c = Vector.angleBetween(new Vector(0, 1, 0), this.binorm) * 2 - Math.PI;
+        this.curbinormangle -= c > -10 ? (this.curbinormangle - c) / 50 : 0;
 
         this.mesh.lookAt(this.rotation.add(this.pos).toBabylon(), 0, 0, this.curbinormangle);
         this.acc.mult(0);
@@ -205,14 +237,14 @@ var createScene = function () {
         let coh = steer;
 
         let sep = posSum2;
-        this.acc.add(ali.mult(1));
-        this.acc.add(coh.mult(3));
-        this.acc.add(sep.mult(1));
+        this.acc.add(ali.mult(aliw));
+        this.acc.add(coh.mult(cohw));
+        this.acc.add(sep.mult(sepw));
     };
 
     //create Boid
     boids = [];
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < num; i++) {
         boids.push(new Boid((Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400, Math.random() * 10 + 1, scene, i));
     }
 
@@ -222,6 +254,72 @@ var createScene = function () {
             boids[i].update();
         }
     });
+
+    //sliders
+    var slider = document.getElementById("coh");
+    var output = document.getElementById("output");
+    output.innerHTML = "&#160;3.00";
+
+    slider.oninput = function () {
+        cohw = parseFloat(this.value) / 1000;
+        output.innerHTML = Math.abs(parseFloat(this.value / 100));
+        if (output.innerHTML.length === 1) output.innerHTML += ".00";
+        if (output.innerHTML.length === 2) output.innerHTML += ".0";
+        if (output.innerHTML.length === 3) output.innerHTML += "0";
+        if (this.value < 0) output.innerHTML = "-" + output.innerHTML;
+        else output.innerHTML = "&#160;" + output.innerHTML
+    };
+
+    var slider2 = document.getElementById("ali");
+    var output2 = document.getElementById("output2");
+    output2.innerHTML = "&#160;1.00";
+
+    slider2.oninput = function () {
+        aliw = parseFloat(this.value) / 1000;
+        output2.innerHTML = Math.abs(parseFloat(this.value / 100));
+        if (output2.innerHTML.length === 1) output2.innerHTML += ".00";
+        if (output2.innerHTML.length === 2) output2.innerHTML += ".0";
+        if (output2.innerHTML.length === 3) output2.innerHTML += "0";
+        if (this.value < 0) output2.innerHTML = "-" + output2.innerHTML;
+        else output2.innerHTML = "&#160;" + output2.innerHTML
+    };
+
+    var slider3 = document.getElementById("sep");
+    var output3 = document.getElementById("output3");
+    output3.innerHTML = "&#160;1.00";
+
+    slider3.oninput = function () {
+        sepw = parseFloat(this.value) / 1000;
+        output3.innerHTML = Math.abs(parseFloat(this.value / 100));
+        if (output3.innerHTML.length === 1) output3.innerHTML += ".00";
+        if (output3.innerHTML.length === 2) output3.innerHTML += ".0";
+        if (output3.innerHTML.length === 3) output3.innerHTML += "0";
+        if (this.value < 0) output3.innerHTML = "-" + output3.innerHTML;
+        else output3.innerHTML = "&#160;" + output3.innerHTML
+    };
+
+    var slider4 = document.getElementById("num");
+    var output4 = document.getElementById("output4");
+    output4.innerHTML = "100&#160;&#160;";
+
+    slider4.oninput = function () {
+        num = parseFloat(this.value);
+        let i = 0;
+        while(boids.length !== num) {
+            i++;
+            if (boids.length > num) {
+                boids[boids.length-1].mesh.dispose();
+                boids.pop();
+            }
+            if (boids.length < num) {
+                boids.push(new Boid((Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400, Math.random() * 10 + 1, scene, num-1));
+            }
+        }
+        output4.innerHTML = parseFloat(this.value);
+        if (output4.innerHTML.length === 1) output4.innerHTML += "&#160;&#160;&#160;&#160;&#160;&#160;";
+        if (output4.innerHTML.length === 2) output4.innerHTML += "&#160;&#160;&#160;&#160;";
+        if (output4.innerHTML.length === 3) output4.innerHTML += "&#160;&#160;";
+    };
 
     return scene;
 };
@@ -240,7 +338,10 @@ camera.attachControl(canvas, true);
 BABYLON.SceneLoader.ImportMesh("", "./", "Wolf.babylon", scene, function (newMeshes) {
     scene.executeWhenReady(function () {
         models.wolf = newMeshes[0];
+        models.wolf.emissiveTexture = new BABYLON.Texture("Wolf_Cylinder_DIFFUSE.jpg", scene);
         models.wolf.scaling = new BABYLON.Vector3(5, 5, 5);
+        //var hl = new BABYLON.HighlightLayer("hl", scene);
+        //hl.addMesh(models.wolf, BABYLON.Color3.Black());
         createScene();
     });
 });

@@ -95,8 +95,8 @@ var createScene = function () {
     }*/
 
     var boids;
-    var cohw = 3;
-    var aliw = 1;
+    var cohw = 5;
+    var aliw = 10;
     var sepw = 1;
     var num = 100;
 
@@ -114,8 +114,8 @@ var createScene = function () {
         this.vel = new Vector(0, -1, 1);
         this.acc = new Vector(0, 0, 0);
 
-        this.maxSpeed = 4;
-        this.maxForce = 0.03;
+        this.maxSpeed = 1;
+        this.maxForce = 0.01;
 
         this.radius = radius + 2;
 
@@ -218,7 +218,7 @@ var createScene = function () {
                 //for each pair, this + a boid, find the unit vector between them and scale its magnitude based on distance
                 repulse = Vector.sub(this.pos, b.pos);
                 repulse.normalize();
-                repulse.div(d);
+                repulse.div(d*2);
                 posSum2.add(repulse);
                 count++;
             }
@@ -258,7 +258,7 @@ var createScene = function () {
     //sliders
     var slider = document.getElementById("coh");
     var output = document.getElementById("output");
-    output.innerHTML = "&#160;3.00";
+    output.innerHTML = "&#160;5.00";
 
     slider.oninput = function () {
         cohw = parseFloat(this.value) / 1000;
@@ -272,7 +272,7 @@ var createScene = function () {
 
     var slider2 = document.getElementById("ali");
     var output2 = document.getElementById("output2");
-    output2.innerHTML = "&#160;1.00";
+    output2.innerHTML = "&#160;10.0";
 
     slider2.oninput = function () {
         aliw = parseFloat(this.value) / 1000;
@@ -338,7 +338,6 @@ camera.attachControl(canvas, true);
 BABYLON.SceneLoader.ImportMesh("", "./", "Wolf.babylon", scene, function (newMeshes) {
     scene.executeWhenReady(function () {
         models.wolf = newMeshes[0];
-        models.wolf.emissiveTexture = new BABYLON.Texture("Wolf_Cylinder_DIFFUSE.jpg", scene);
         models.wolf.scaling = new BABYLON.Vector3(5, 5, 5);
         //var hl = new BABYLON.HighlightLayer("hl", scene);
         //hl.addMesh(models.wolf, BABYLON.Color3.Black());

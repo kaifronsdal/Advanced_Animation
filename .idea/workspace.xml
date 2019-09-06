@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1548d791-2c2f-469d-b67a-940f5d3f910d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Labs/Flocking/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Labs/Flocking/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Labs/Flocking/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/Labs/Flocking/script.js" afterDir="false" />
-    </list>
+    <list default="true" id="1548d791-2c2f-469d-b67a-940f5d3f910d" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -18,7 +15,7 @@
     <session id="666065474">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="10" />
+          <entry key="project.closed" value="11" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.10" value="1" />
@@ -263,18 +260,17 @@
       <workItem from="1538496297334" duration="15430000" />
       <workItem from="1539314203828" duration="5038000" />
       <workItem from="1539387064238" duration="235000" />
-      <workItem from="1539705835386" duration="14738000" />
+      <workItem from="1539705835386" duration="14756000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="83070000" />
+    <option name="totallyTimeSpent" value="83088000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1366" height="688" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24981412" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24981412" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
